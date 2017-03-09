@@ -4,12 +4,12 @@ var game = g.game;
 var tl = require("@akashic-extension/akashic-timeline");
 
 module.exports = function() {
-  var scene = new g.Scene(game);
+  var scene = new g.Scene({ game: game });
   scene.loaded.handle(function() {
     var t = new tl.Timeline(scene);
 
     // シンプル往復
-    var rectGray = new g.FilledRect(scene, "gray", 32, 32);
+    var rectGray = new g.FilledRect({ scene: scene, cssColor: "gray", width: 32, height: 32 });
     scene.append(rectGray);
     rectGray.x = 10;
     rectGray.y = 10;
@@ -19,7 +19,7 @@ module.exports = function() {
      .to({ x: 10 }, 1000, tl.Easing.linear);
 
     // 回転しながら往復
-    var rectRed = new g.FilledRect(scene, "red", 32, 32);
+    var rectRed = new g.FilledRect({ scene: scene, cssColor: "red", width: 32, height: 32 });
     var rectRedX = rectGray.x;
     scene.append(rectRed);
     rectRed.x = rectRedX;
@@ -31,7 +31,7 @@ module.exports = function() {
      .to({ angle: 0 }, 0);
 
     // 各種イージング
-    var rectBlue = new g.FilledRect(scene, "blue", 32, 32);
+    var rectBlue = new g.FilledRect({ scene: scene, cssColor: "blue", width: 32, height: 32 });
     var rectBlueX = rectRed.x;
     rectBlue.x = rectBlueX;
     rectBlue.y = rectRed.y + rectRed.height + 10;
@@ -49,7 +49,7 @@ module.exports = function() {
     }
 
     // カスタム関数によるアニメーション
-    var rectFuchsia = new g.FilledRect(scene, "fuchsia", 32, 32);
+    var rectFuchsia = new g.FilledRect({ scene: scene, cssColor: "fuchsia", width: 32, height: 32 });
     var rectFuchsiaX = rectBlue.x;
     var rectFuchsiaY = rectBlue.y + rectBlue.height + 10;
     scene.append(rectFuchsia);
@@ -64,7 +64,7 @@ module.exports = function() {
      .to({ x: rectFuchsiaX }, 1000, tl.Easing.linear);
 
     // 並列実行によるアニメーション
-    var rectGreen = new g.FilledRect(scene, "green", 32, 32);
+    var rectGreen = new g.FilledRect({ scene: scene, cssColor: "green", width: 32, height: 32 });
     var rectGreenX = rectFuchsia.x;
     var rectGreenY = rectFuchsia.y + rectFuchsia.height + 20;
     scene.append(rectGreen);
