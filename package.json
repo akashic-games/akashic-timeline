@@ -1,6 +1,6 @@
 {
   "name": "@akashic-extension/akashic-timeline",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
@@ -14,8 +14,7 @@
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
   "files": [
-    "lib",
-    "doc"
+    "lib"
   ],
   "devDependencies": {
     "@akashic/akashic-engine": "~1.10.1",
