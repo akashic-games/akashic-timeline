@@ -5,6 +5,16 @@ import Tween = require("../../lib/Tween");
 import Easing = require("../../lib/Easing");
 import Timeline = require("../../lib/Timeline");
 
+class Game extends g.Game {
+	raiseEvent(e: g.Event): void {}
+	raiseTick(events?: g.Event[]): void {}
+	addEventFilter(filter: g.EventFilter): void {}
+	removeEventFilter(filter: g.EventFilter): void {}
+	shouldSaveSnapshot(): boolean { return false; }
+	saveSnapshot(snapshot: any, timestamp?: number): void {}
+	_leaveGame(): void {}
+}
+
 describe("test Tween", () => {
 	beforeEach(() => {
 	});
@@ -512,8 +522,8 @@ describe("test Tween serializeState", () => {
 	var scene: g.Scene = null;
 	var game: g.Game = null;
 	beforeEach(() => {
-		game = new g.Game({width: 320, height: 270, fps: 30}, null);
-		scene = new g.Scene(game);
+		game = new Game({width: 320, height: 270, fps: 30}, null);
+		scene = new g.Scene({ game: game });
 	});
 
 	afterEach(() => {

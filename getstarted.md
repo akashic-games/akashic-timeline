@@ -6,7 +6,8 @@
 
 ## <a name="準備"></a> 準備
 
-Akashicを使ったゲーム開発の準備が終わっていない場合は、[Akashicを利用したゲーム開発](https://akashic-games.github.io/tutorial/tutorial.html)を参照してゲーム開発の環境を整えて下さい。
+Akashicを使ったゲーム開発の準備が終わっていない場合は、
+[Akashic Engineのチュートリアル](https://akashic-games.github.io/tutorial/tutorial-v2.html)を参照してゲーム開発の環境を整えて下さい。
 
 akashic-timelineはAkashicの拡張機能として提供されています。
 
@@ -17,9 +18,10 @@ game.json が置かれているディレクトリで以下のコマンドを実�
 akashic install @akashic-extension/akashic-timeline
 ```
 
-このコマンドは `npm install --save @akashic-extension/akashic-timeline` を行い、その後 game.json の globalScripts フィールドを更新します。(game.json の詳細は [game.jsonの仕様](https://akashic-games.github.io/guide/game-json.html) を参照してください)
+このコマンドは `npm install --save @akashic-extension/akashic-timeline` を行い、その後 game.json の globalScripts フィールドを更新します。
+(game.json の詳細は [game.jsonの仕様](https://akashic-games.github.io/guide/game-json.html) を参照してください)
 
-akashic-timelineを利用したいシーンで以下の様に `require` を行います。
+akashic-timelineを利用したいシーンで以下のように `require` を行います。
 
 ```javascript
 var tl = require("@akashic-extension/akashic-timeline");
@@ -31,7 +33,7 @@ var tl = require("@akashic-extension/akashic-timeline");
 `Timeline` は後述の `Tween` を管理するオブジェクトです。
 
 ```javascript
-scene.loaded.handle(function() {
+scene.loaded.add(function() {
     var timeline = new tl.Timeline(scene);
     ...
 }
@@ -76,7 +78,7 @@ tween.moveX(100, 1000);
 tween.moveY(100, 2000);
 ```
 
-この様に、アクションは変化内容と変化時間を指定することになります。
+このように、アクションは変化内容と変化時間を指定することになります。
 
 ここまでのコードは以下のように `.` で繋げることで簡潔に記述することが出来ます。
 
@@ -96,7 +98,6 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 ```
 
 これまでの例では絶対位置への移動でしたが、現在の位置からの相対位置に移動させてみましょう。
-
 `moveBy` アクションを利用することで相対位置への移動を行うことが出来ます。
 
 以下の例では、2秒掛けて四角形をX座標150、Y座標250の位置に移動させています。
@@ -112,7 +113,6 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 ## <a name="Easingの指定"></a> Easingの指定
 
 Easingとはアニメーションの加速や減速方法を定義した関数です。
-
 akashic-timelineでは各アクションに様々なEasingを指定することが出来ます。
 
 Easingを指定しない以下の例では、四角形は直線的な動作で移動します。
@@ -243,5 +243,4 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 これまでの例では、`timeline.create()` のdestroyedオプションで `rect.destroyed` を指定していました。
 
 通常はAkashicのエンティティのdestroyedメソッドを指定することになります。
-
 なお、destroyedオプションで指定した関数内での `this` は、アニメーション対象（本ドキュメントの例では `rect` ）となります。

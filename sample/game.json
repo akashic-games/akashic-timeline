@@ -16,5 +16,8 @@
 		"node_modules/@akashic-extension/akashic-timeline/lib/Tween.js",
 		"node_modules/@akashic-extension/akashic-timeline/lib/index.js",
 		"node_modules/@akashic-extension/akashic-timeline/package.json"
-	]
+	],
+	"environment": {
+		"sandbox-runtime": "2"
+	}
 }

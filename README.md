@@ -4,9 +4,9 @@
 
 # akashic-timeline
 
-**akashic-timeline**はakashic-engine向けのトゥイーンアニメーションライブラリです。
+**akashic-timeline**はAkashic Engine向けのトゥイーンアニメーションライブラリです。
 
-たとえばエンティティ `e` を現在位置から座標(300, 400)へ2000ミリ秒かけて動かすアニメーションを次のように記述することができます。
+次のようなコードで、エンティティ `e` を現在位置から座標(300, 400)へ2000ミリ秒かけて動かすアニメーションを記述することができます。
 
 ```javascript
 timeline.create(e, {modified: e.modified, destroyed: e.destroyed })
