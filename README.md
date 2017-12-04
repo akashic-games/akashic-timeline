@@ -46,7 +46,7 @@ npm install
 akashic-sandbox .
 ```
 
-上記コマンドの実行には Git と `akashic-sandbox` が必要です。
+上記コマンドの実行には Git と `akashic-sandbox` (v0.13.3以降)が必要です。
 
 ## ビルド方法
 
