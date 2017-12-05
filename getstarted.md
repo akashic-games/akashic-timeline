@@ -7,7 +7,7 @@
 ## <a name="準備"></a> 準備
 
 Akashicを使ったゲーム開発の準備が終わっていない場合は、
-[Akashic Engineのチュートリアル](https://akashic-games.github.io/tutorial/tutorial-v2.html)を参照してゲーム開発の環境を整えて下さい。
+[Akashic Engineのチュートリアル](https://akashic-games.github.io/tutorial/tutorial-v2.html)を参照してゲーム開発の環境を整えてください。
 
 akashic-timelineはAkashicの拡張機能として提供されています。
 
@@ -55,7 +55,7 @@ rect.y = 10;
 rect.modified();
 ```
 
-シーンに追加した四角形をX座標100の位置に1秒掛けて移動させてみましょう。
+シーンに追加した四角形をX座標100の位置に1秒かけて移動させてみましょう。
 
 ```javascript
 var tween = timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed });
@@ -66,7 +66,7 @@ tween.moveX(100, 1000);
 第二引数ではオプションを指定していますが、このオプションについては後述します。
 `Tween` とはアニメーションの実行単位であるアクションを操作するオブジェクトです。
 ゲーム開発者は、`Tween` を通して実行したいアクションを追加していきます。
-アクションの詳細はakashic-timelineのAPIリファレンスを参照して下さい。
+アクションの詳細はakashic-timelineのAPIリファレンスを参照してください。
 
 この例では `moveX` アクションを利用しています。
 
@@ -133,7 +133,7 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 ```
 
 akashic-timelineでは標準で20種類のEasingをサポートしています。
-詳しくはakashic-timelineのAPIリファレンスを参照して下さい。
+詳しくはakashic-timelineのAPIリファレンスを参照してください。
 
 ## <a name="回転"></a> 回転
 
@@ -164,7 +164,7 @@ timeline.create(rect, {loop: true, modified: rect.modified, destroyed: rect.dest
 このmodifiedオプションは、毎フレーム、アクションを実行した度に呼び出される関数を指定するものです。
 
 通常はAkashicのエンティティのmodifiedメソッドを指定することになります。
-`Tile` や `Label` のような内部描画キャッシュを持つエンティティの場合は、必要に応じてinvalidateメソッドを指定して下さい。
+`Tile` や `Label` のような内部描画キャッシュを持つエンティティの場合は、必要に応じてinvalidateメソッドを指定してください。
 
 なお、modifiedオプションで指定した関数内での `this` は、アニメーション対象（本ドキュメントの例では `rect` ）となります。
 
