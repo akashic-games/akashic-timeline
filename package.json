@@ -1,6 +1,6 @@
 {
   "name": "@akashic-extension/akashic-timeline",
-  "version": "0.4.3",
+  "version": "2.0.0",
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~1.10.1",
+    "@akashic/akashic-engine": "~2.0.0",
     "del": "~1.1.1",
     "gulp": "~3.9.1",
     "gulp-istanbul": "~0.10.4",
@@ -32,7 +32,7 @@
     "mdast-lint": "~1.1.1",
     "tslint": "~3.7.4",
     "typedoc": "~0.4.4",
-    "typescript": "1.7.5",
+    "typescript": "~2.1.6",
     "typings": "^1.0.4"
   },
   "typings": "lib/index.d.ts",

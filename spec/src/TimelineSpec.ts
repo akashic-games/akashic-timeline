@@ -1,13 +1,23 @@
 // NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
 (<any>global).g = require("@akashic/akashic-engine");
 
+class Game extends g.Game {
+	raiseEvent(e: g.Event): void {}
+	raiseTick(events?: g.Event[]): void {}
+	addEventFilter(filter: g.EventFilter): void {}
+	removeEventFilter(filter: g.EventFilter): void {}
+	shouldSaveSnapshot(): boolean { return false; }
+	saveSnapshot(snapshot: any, timestamp?: number): void {}
+	_leaveGame(): void {}
+}
+
 import Timeline = require("../../lib/Timeline");
 
 describe("test Timeline", () => {
 	var scene: g.Scene = null;
 	beforeEach(() => {
-		var game = new g.Game({width: 320, height: 270, fps: 30}, null);
-		scene = new g.Scene(game);
+		var game = new Game({width: 320, height: 270, fps: 30}, null);
+		scene = new g.Scene({ game: game });
 	});
 
 	afterEach(() => {
@@ -59,11 +69,11 @@ describe("test Timeline", () => {
 		expect(tl._tweens.length).toBe(1);
 		var tw2 = tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
-		expect(scene.update.isHandled(tl, tl._handler)).toBe(true);
+		expect(scene.update.contains(tl._handler, tl)).toBe(true);
 		tl.destroy();
 		expect(tl._scene).toBeUndefined();
 		expect(tl._tweens.length).toBe(0);
-		expect(scene.update.isHandled(tl, tl._handler)).toBe(false);
+		expect(scene.update.contains(tl._handler, tl)).toBe(false);
 	});
 
 	it("destroy - scene already destroyed", () => {

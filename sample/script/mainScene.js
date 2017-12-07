@@ -5,7 +5,7 @@ var tl = require("@akashic-extension/akashic-timeline");
 
 module.exports = function() {
   var scene = new g.Scene({ game: game });
-  scene.loaded.handle(function() {
+  scene.loaded.add(function() {
     var t = new tl.Timeline(scene);
 
     // シンプル往復

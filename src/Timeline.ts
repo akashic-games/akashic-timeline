@@ -24,7 +24,7 @@ class Timeline {
 		this._tweens = [];
 		this._fps = this._scene.game.fps;
 		this.paused = false;
-		scene.update.handle(this, this._handler);
+		scene.update.add(this._handler, this);
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Timeline {
 	destroy(): void {
 		this._tweens.length = 0;
 		if (!this._scene.destroyed()) {
-			this._scene.update.remove(this, this._handler);
+			this._scene.update.remove(this._handler, this);
 		}
 		this._scene = undefined;
 	}
