@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased changes
+
+* ドキュメントが生成できていなかったため修正
+
 ## 2.0.0
 
 * akashic-engine@2.0.0 に追従。あわせてバージョンを 2.0.0 に。

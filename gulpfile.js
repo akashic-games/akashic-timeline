@@ -19,7 +19,7 @@ gulp.task("install:typings:src", shell.task("typings install"));
 
 gulp.task("install:typings:spec", shell.task("typings install", { cwd: "spec/" }));
 
-gulp.task("compile", shell.task("tsc"));
+gulp.task("compile", shell.task("tsc -p ./"));
 
 gulp.task("compile:spec",　["install:typings:spec"], shell.task("tsc", {cwd: "spec/"}));
 

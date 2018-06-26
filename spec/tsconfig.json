@@ -4,7 +4,8 @@
     "noLib": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "outDir": "./build"
+    "outDir": "./build",
+    "types": []
   },
   "filesGlob": [
     "../node_modules/typescript/lib/lib.d.ts",

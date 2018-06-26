@@ -31,7 +31,7 @@
     "mdast": "~2.0.0",
     "mdast-lint": "~1.1.1",
     "tslint": "~3.7.4",
-    "typedoc": "~0.4.4",
+    "typedoc": "^0.11.1",
     "typescript": "~2.1.6",
     "typings": "^1.0.4"
   },
