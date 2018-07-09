@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased changes
+## 2.0.1
 
 * ドキュメントが生成できていなかったため修正
 
