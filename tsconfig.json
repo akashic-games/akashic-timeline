@@ -5,7 +5,8 @@
     "noLib": true,
     "noImplicitAny": true,
     "outDir": "lib",
-    "module": "commonjs"
+    "module": "commonjs",
+    "types": []
   },
   "filesGlob": [
     "./node_modules/typescript/lib/lib.es6.d.ts",
