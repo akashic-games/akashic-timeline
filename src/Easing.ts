@@ -60,10 +60,12 @@ module Easing {
 	 * @param c 終了位置
 	 * @param d 所要時間
 	 */
-	export function easeInQubic(t: number, b: number, c: number, d: number): number {
+	export function easeInCubic(t: number, b: number, c: number, d: number): number {
 		t /= d;
 		return c * t * t * t + b;
 	}
+
+	export const easeInQubic = easeInCubic;
 
 	/**
 	 * 入力値をeaseOutQubicした結果の現在位置を返す。
@@ -72,11 +74,13 @@ module Easing {
 	 * @param c 終了位置
 	 * @param d 所要時間
 	 */
-	export function easeOutQubic(t: number, b: number, c: number, d: number): number {
+	export function easeOutCubic(t: number, b: number, c: number, d: number): number {
 		t /= d;
 		--t;
 		return c * ( t * t * t + 1) + b;
 	}
+
+	export const easeOutQubic = easeOutCubic;
 
 	/**
 	 * 入力値をeaseInOutQubicした結果の現在位置を返す。
@@ -85,12 +89,14 @@ module Easing {
 	 * @param c 終了位置
 	 * @param d 所要時間
 	 */
-	export function easeInOutQubic(t: number, b: number, c: number, d: number): number {
+	export function easeInOutCubic(t: number, b: number, c: number, d: number): number {
 		t /= d / 2;
 		if (t < 1) return c / 2 * t * t * t + b;
 		t -= 2;
 		return c / 2 * ( t * t * t + 2) + b;
 	}
+
+	export const easeInOutQubic = easeInOutCubic;
 
 	/**
 	 * 入力値をeaseInQuartした結果の現在位置を返す。
