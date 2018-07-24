@@ -65,6 +65,9 @@ module Easing {
 		return c * t * t * t + b;
 	}
 
+	/**
+	 * @deprecated この関数は非推奨機能である。代わりに `easeInCubic` を用いるべきである。
+	 */
 	export const easeInQubic = easeInCubic;
 
 	/**
@@ -80,6 +83,9 @@ module Easing {
 		return c * ( t * t * t + 1) + b;
 	}
 
+	/**
+	 * @deprecated この関数は非推奨機能である。代わりに `easeOutCubic` を用いるべきである。
+	 */
 	export const easeOutQubic = easeOutCubic;
 
 	/**
@@ -96,6 +102,9 @@ module Easing {
 		return c / 2 * ( t * t * t + 2) + b;
 	}
 
+	/**
+	 * @deprecated この関数は非推奨機能である。代わりに `easeInOutCubic` を用いるべきである。
+	 */
 	export const easeInOutQubic = easeInOutCubic;
 
 	/**
