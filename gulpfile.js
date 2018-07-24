@@ -23,18 +23,6 @@ gulp.task("compile", shell.task("tsc -p ./"));
 
 gulp.task("compile:spec",　["install:typings:spec"], shell.task("tsc", {cwd: "spec/"}));
 
-
-gulp.task("lint", function(){
-	return gulp.src("src/**/*.ts")
-		.pipe(tslint())
-		.pipe(tslint.report());
-});
-
-gulp.task("lint-md", function(){
-	return gulp.src(["**/*.md", "!node_modules/**/*.md"])
-		.pipe(shell(["mdast <%= file.path %> --frail --no-stdout --quiet"]));
-});
-
 gulp.task("test", ["compile:spec"], function(cb) {
 	var jasmineReporters = [ new Reporter({
 			isVerbose: false,
@@ -52,18 +40,6 @@ gulp.task("test", ["compile:spec"], function(cb) {
 				.pipe(istanbul.writeReports({ reporters: ["text", "cobertura", "lcov"] }))
 				.on("end", cb);
 		});
-});
-
-gulp.task("typedoc", function() {
-	return gulp
-		.src(["./node_modules/@akashic/akashic-engine/lib/main.d.ts", "./src/*.ts", "!./src/index.ts"])
-		.pipe(typedoc({
-			module: "commonjs",
-			target: "es5",
-			out: "doc/",
-			name: "akashic-timeline",
-			includeDeclarations: false
-		}));
 });
 
 gulp.task("default", ["compile"]);
