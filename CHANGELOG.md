@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# 2.1.0
+## 2.1.0
 
 * akashic-engine@2.3.0に追従
 * ビルドツールを更新
