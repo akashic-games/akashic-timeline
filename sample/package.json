@@ -9,6 +9,6 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@akashic-extension/akashic-timeline": "2.1.0"
+    "@akashic-extension/akashic-timeline": "~2.1.1"
   }
 }

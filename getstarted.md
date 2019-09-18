@@ -58,7 +58,7 @@ rect.modified();
 シーンに追加した四角形をX座標100の位置に1秒かけて移動させてみましょう。
 
 ```javascript
-var tween = timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed });
+var tween = timeline.create(rect);
 tween.moveX(100, 1000);
 ```
 
@@ -73,7 +73,7 @@ tween.moveX(100, 1000);
 続けて `moveY` アクションでY座標100の位置に2秒掛けて移動させてみます。
 
 ```javascript
-var tween = timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed });
+var tween = timeline.create(rect);
 tween.moveX(100, 1000);
 tween.moveY(100, 2000);
 ```
@@ -83,7 +83,7 @@ tween.moveY(100, 2000);
 ここまでのコードは以下のように `.` で繋げることで簡潔に記述することが出来ます。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .moveX(100, 1000)
         .moveY(100, 2000);
 ```
@@ -93,7 +93,7 @@ X座標とY座標を同時に変化させたい場合は `moveTo` アクショ�
 以下の例では、2秒掛けてX座標300、Y座標400の位置に移動させています。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .moveTo(300, 400, 2000);
 ```
 
@@ -106,7 +106,7 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 rect.x = 100;
 rect.y = 200;
 rect.modified();
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .moveBy(50, 50, 2000);
 ```
 
@@ -118,7 +118,7 @@ akashic-timelineでは各アクションに様々なEasingを指定すること�
 Easingを指定しない以下の例では、四角形は直線的な動作で移動します。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .moveTo(300, 400, 2000);
 ```
 
@@ -128,7 +128,7 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 以下の例では、 `Easing.easeInOutCirc` を指定しています。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .moveTo(300, 400, 2000, tl.Easing.easeInOutCirc);
 ```
 
@@ -142,7 +142,7 @@ akashic-timelineでは標準で20種類のEasingをサポートしています�
 以下の例では、四角形を90度回転させています。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .rotateTo(90, 2000);
 ```
 
@@ -153,7 +153,7 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 以下の例では、180度回転、-180度回転を繰り返しています。
 
 ```javascript
-timeline.create(rect, {loop: true, modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect, {loop: true})
         .rotateBy(180, 1000)
         .rotateBy(-180, 1000);
 ```
@@ -177,7 +177,7 @@ timeline.create(rect, {loop: true, modified: rect.modified, destroyed: rect.dest
 最後に `moveTo` アクションで開始位置に戻っていますが、これは `rotateTo` アクションが完全に終了した後に実行されます。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
         .moveTo(200, 200, 1000)
         .con()
         .rotateTo(180, 2000)
@@ -194,7 +194,7 @@ timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
 以下の例では、 `FilledRect` の `width` と `height` を変化させています。
 
 ```javascript
-timeline.create(rect, {loop: true, modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect, {loop: true})
         .to({width: 500, height: 200}, 1000)
         .to({width: 0, height: 0}, 1000);
 ```
@@ -212,7 +212,7 @@ timeline.create(rect, {loop: true, modified: rect.modified, destroyed: rect.dest
 変化量は指定したEasingによって変化します。
 
 ```javascript
-timeline.create(rect, {modified: rect.modified, destroyed: rect.destroyed })
+timeline.create(rect)
     .every(function(elapsed, progress) {
         var c = parseInt(255 * progress);
         this.cssColor = "rgb(" + c + ",0," + c + ")";

@@ -516,6 +516,32 @@ describe("test Tween", () => {
 		expect(anyTw._lastStep[0]).toBe(action1);
 		expect(anyTw._lastStep[1]).toBe(action2);
 	});
+
+	it("modified and destroy are same as target, when modified and destroy are omitted", () => {
+		let count = 0;
+		const target = {x: 0, y: 0, modified: () => { count++; }};
+		const tw = new Tween(target);
+		tw.to({x: 200, y: 300}, 600, Easing.easeInOutCirc);
+		tw._fire(200);
+		expect(count).toBe(1);
+		tw._fire(200);
+		expect(count).toBe(2);
+		tw._fire(200);
+		expect(count).toBe(3);
+		tw._fire(200);
+		expect(count).toBe(3);
+	});
+
+	it("modified and destroy are same as target, when modified and destroy are omitted", () => {
+		let count = 0;
+		let destroyedStr = false;
+		const target = {x: 0, y: 0, destroyed: () => { return destroyedStr; }};
+		const tw = new Tween(target);
+		tw._loop = true;
+		expect(tw.destroyed()).toBe(false);
+		destroyedStr = true;
+		expect(tw.destroyed()).toBe(true);
+	});
 });
 
 describe("test Tween serializeState", () => {

@@ -14,7 +14,7 @@ module.exports = function() {
     rectGray.x = 10;
     rectGray.y = 10;
     rectGray.modified();
-    t.create(rectGray, { loop: true, modified: rectGray.modified, destroyed: rectGray.destroyed })
+    t.create(rectGray, { loop: true })
      .to({ x: game.width - rectGray.width - 10 }, 1000, tl.Easing.linear)
      .to({ x: 10 }, 1000, tl.Easing.linear);
 
@@ -25,7 +25,7 @@ module.exports = function() {
     rectRed.x = rectRedX;
     rectRed.y = rectGray.y + rectGray.height + 10;
     rectRed.modified();
-    t.create(rectRed, { loop: true, modified: rectRed.modified, destroyed: rectRed.destroyed })
+    t.create(rectRed, { loop: true })
      .to({ angle: 180, x: game.width - rectRed.width - 10 }, 800, tl.Easing.linear)
      .to({ angle: 360, x: rectRedX }, 800, tl.Easing.linear)
      .to({ angle: 0 }, 0);
@@ -37,7 +37,8 @@ module.exports = function() {
     rectBlue.y = rectRed.y + rectRed.height + 10;
     scene.append(rectBlue);
     var easing = Object.keys(tl.Easing);
-    var tween = t.create(rectBlue, { loop: true, modified: rectBlue.modified, destroyed: rectBlue.destroyed });
+    var tween = t.create(rectBlue, { loop: true });
+    var j;
     tween.call(function() { j = 0; });
     for (var i = 0; i < easing.length; ++i) {
       tween.wait(1000)
@@ -56,7 +57,7 @@ module.exports = function() {
     rectFuchsia.x = rectFuchsiaX;
     rectFuchsia.y = rectFuchsiaY;
     rectFuchsia.modified();
-    t.create(rectFuchsia, { loop: true, modified: rectFuchsia.modified, destroyed: rectFuchsia.destroyed })
+    t.create(rectFuchsia, { loop: true })
      .every(function (_, p) {
        rectFuchsia.x = p * (game.width - rectGray.width - 10) + rectFuchsiaX;
        rectFuchsia.y = 15 * Math.sin(3 * p * 2 * Math.PI) + rectFuchsiaY;
@@ -71,7 +72,7 @@ module.exports = function() {
     rectGreen.x = rectGreenX;
     rectGreen.y = rectGreenY;
     rectGreen.modified();
-    t.create(rectGreen, { loop: true, modified: rectGreen.modified, destroyed: rectGreen.destroyed })
+    t.create(rectGreen, { loop: true })
      .moveX(game.width - rectGreen.width - 10, 1000)
      .con()
      .rotateTo(180, 500)

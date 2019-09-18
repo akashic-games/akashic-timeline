@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.1
+* Tweenオブジェクト生成時に `modified` と `destroyed` を省略した場合、対象オブジェクトのものを使うよう変更
+
 ## 2.1.0
 
 * akashic-engine@2.3.0に追従
