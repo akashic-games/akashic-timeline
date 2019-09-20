@@ -533,13 +533,12 @@ describe("test Tween", () => {
 	});
 
 	it("modified and destroy are same as target, when modified and destroy are omitted", () => {
-		let count = 0;
-		let destroyedStr = false;
-		const target = {x: 0, y: 0, destroyed: () => { return destroyedStr; }};
+		let destroyed = false;
+		const target = {x: 0, y: 0, destroyed: () => { return destroyed; }};
 		const tw = new Tween(target);
 		tw._loop = true;
 		expect(tw.destroyed()).toBe(false);
-		destroyedStr = true;
+		destroyed = true;
 		expect(tw.destroyed()).toBe(true);
 	});
 });
