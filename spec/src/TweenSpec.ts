@@ -538,7 +538,7 @@ describe("test Tween", () => {
 		expect(count).toBe(5);
 	});
 
-	it("calls target's detroyed(), when the destroyed option is omitted", () => {
+	it("calls target's destroyed(), when the destroyed option is omitted", () => {
 		let count = 0;
 		const target = {x: 0, y: 0, destroyed: () => { count++; return false; }};
 		const tw = new Tween(target);
