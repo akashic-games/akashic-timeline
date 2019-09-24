@@ -30,7 +30,7 @@ class Timeline {
 	/**
 	 * Timelineに紐付いたTweenを生成する。
 	 * @param target タイムライン処理の対象にするオブジェクト
-	 * @param option Tweenの生成オプション
+	 * @param option Tweenの生成オプション 省略された場合、 {modified: target.modified, destroyed: target.destroyed} が与えられた時と同様の処理を行う
 	 */
 	create(target: any, option?: TweenOption): Tween {
 		var t = new Tween(target, option);

@@ -517,7 +517,7 @@ describe("test Tween", () => {
 		expect(anyTw._lastStep[1]).toBe(action2);
 	});
 
-	it("modified and destroy are same as target, when modified and destroy are omitted", () => {
+	it("calls target's modified(), when the modified option is omitted", () => {
 		let count = 0;
 		const target = {x: 0, y: 0, modified: () => { count++; }};
 		const tw = new Tween(target);
@@ -530,16 +530,27 @@ describe("test Tween", () => {
 		expect(count).toBe(3);
 		tw._fire(200);
 		expect(count).toBe(3);
+		const twLoop = new Tween(target, {loop: true});
+		twLoop.to({x: 200, y: 300}, 200, Easing.easeInOutCirc);
+		twLoop._fire(200);
+		expect(count).toBe(4);
+		twLoop._fire(200);
+		expect(count).toBe(5);
 	});
 
-	it("modified and destroy are same as target, when modified and destroy are omitted", () => {
-		let destroyed = false;
-		const target = {x: 0, y: 0, destroyed: () => { return destroyed; }};
+	it("calls target's detroyed(), when the destroyed option is omitted", () => {
+		let count = 0;
+		const target = {x: 0, y: 0, destroyed: () => { count++; return false; }};
 		const tw = new Tween(target);
-		tw._loop = true;
-		expect(tw.destroyed()).toBe(false);
-		destroyed = true;
-		expect(tw.destroyed()).toBe(true);
+		tw.destroyed();
+		expect(count).toBe(1);
+		tw.destroyed();
+		expect(count).toBe(2);
+		const twLoop = new Tween(target, {loop: true});
+		twLoop.destroyed();
+		expect(count).toBe(3);
+		twLoop.destroyed();
+		expect(count).toBe(4);
 	});
 });
 
