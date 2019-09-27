@@ -56,8 +56,18 @@ class Tween {
 		this._target = target;
 		this._stepIndex = 0;
 		this._loop = !!option && !!option.loop;
-		this._modifiedHandler = option && option.modified ? option.modified : undefined;
-		this._destroyedHandler = option && option.destroyed ? option.destroyed : undefined;
+		this._modifiedHandler = undefined;
+		if (option && option.modified) {
+			this._modifiedHandler = option.modified;
+		} else if (target && target.modified) {
+			this._modifiedHandler = target.modified;
+		}
+		this._destroyedHandler = undefined;
+		if (option && option.destroyed) {
+			this._destroyedHandler = option.destroyed;
+		} else if (target && target.destroyed) {
+			this._destroyedHandler = target.destroyed;
+		}
 		this._steps = [];
 		this._lastStep = undefined;
 		this._pararel = false;

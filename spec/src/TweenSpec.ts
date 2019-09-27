@@ -516,6 +516,42 @@ describe("test Tween", () => {
 		expect(anyTw._lastStep[0]).toBe(action1);
 		expect(anyTw._lastStep[1]).toBe(action2);
 	});
+
+	it("calls target's modified(), when the modified option is omitted", () => {
+		let count = 0;
+		const target = {x: 0, y: 0, modified: () => { count++; }};
+		const tw = new Tween(target);
+		tw.to({x: 200, y: 300}, 600, Easing.easeInOutCirc);
+		tw._fire(200);
+		expect(count).toBe(1);
+		tw._fire(200);
+		expect(count).toBe(2);
+		tw._fire(200);
+		expect(count).toBe(3);
+		tw._fire(200);
+		expect(count).toBe(3);
+		const twLoop = new Tween(target, {loop: true});
+		twLoop.to({x: 200, y: 300}, 200, Easing.easeInOutCirc);
+		twLoop._fire(200);
+		expect(count).toBe(4);
+		twLoop._fire(200);
+		expect(count).toBe(5);
+	});
+
+	it("calls target's destroyed(), when the destroyed option is omitted", () => {
+		let count = 0;
+		const target = {x: 0, y: 0, destroyed: () => { count++; return false; }};
+		const tw = new Tween(target);
+		tw.destroyed();
+		expect(count).toBe(1);
+		tw.destroyed();
+		expect(count).toBe(2);
+		const twLoop = new Tween(target, {loop: true});
+		twLoop.destroyed();
+		expect(count).toBe(3);
+		twLoop.destroyed();
+		expect(count).toBe(4);
+	});
 });
 
 describe("test Tween serializeState", () => {
