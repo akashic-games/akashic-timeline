@@ -306,10 +306,10 @@ class Tween {
 	}
 
 	/**
-	 * Tweenが破棄されたかどうかを返す。
+	 * アニメーションが終了しているかどうかを返す。
 	 * `_target`が破棄された場合又は、全アクションの実行が終了した場合に`true`を返す。
 	 */
-	destroyed(): boolean {
+	isFinished(): boolean {
 		var ret = false;
 		if (this._destroyedHandler) {
 			ret = this._destroyedHandler.call(this._target);
@@ -325,7 +325,7 @@ class Tween {
 	 * @param delta 前フレームからの経過時間
 	 */
 	_fire(delta: number): void {
-		if (this._steps.length === 0 || this.destroyed() || this.paused) {
+		if (this._steps.length === 0 || this.isFinished() || this.paused) {
 			return;
 		}
 		if (this._stepIndex >= this._steps.length) {

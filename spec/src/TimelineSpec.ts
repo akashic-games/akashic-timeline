@@ -100,7 +100,7 @@ describe("test Timeline", () => {
 		var tw = tl.create({x: 100, y: 200});
 		var firedFps = 0;
 		var firedCount = 0;
-		tw.destroyed = () => {
+		tw.isFinished = () => {
 			return false;
 		};
 		tw._fire = (fps) => {
@@ -121,13 +121,13 @@ describe("test Timeline", () => {
 		var tl = new Timeline(scene);
 		var tw1 = tl.create({x: 100, y: 200});
 		var tw1d = false;
-		tw1.destroyed = () => {
+		tw1.isFinished = () => {
 			return tw1d;
 		};
 		expect(tl._tweens.length).toBe(1);
 		var tw2 = tl.create({x: 300, y: 400});
 		var tw2d = false;
-		tw2.destroyed = () => {
+		tw2.isFinished = () => {
 			return tw2d;
 		};
 		expect(tl._tweens.length).toBe(2);

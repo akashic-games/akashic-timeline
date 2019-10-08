@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.3.0
+* Tween#destroyed() を Tween#isFinished() へ Function 名を変更
+
 ## 2.2.0
 * Tweenオブジェクト生成時に `modified` と `destroyed` を省略した場合、対象オブジェクトのものを使うよう変更
 

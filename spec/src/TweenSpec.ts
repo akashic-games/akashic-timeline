@@ -450,19 +450,19 @@ describe("test Tween", () => {
 		expect(tw._target).toEqual({scaleX: 4, scaleY: 4});
 	});
 
-	it("destroyed", () => {
+	it("isFinished", () => {
 		var target = {x: 0, y: 0};
 		var tw = new Tween(target);
 		tw._loop = false;
-		expect(tw.destroyed()).toBe(true);
+		expect(tw.isFinished()).toBe(true);
 		tw._loop = true;
-		expect(tw.destroyed()).toBe(false);
+		expect(tw.isFinished()).toBe(false);
 		tw._loop = false;
 		tw.to({x: 200, y: 300}, 1000);
-		expect(tw.destroyed()).toBe(false);
+		expect(tw.isFinished()).toBe(false);
 	});
 
-	it("destroyed - destroyedHandler", () => {
+	it("isFinished - destroyedHandler", () => {
 		var target = {x: 0, y: 0};
 		var dres = false;
 		var d = () => {
@@ -470,9 +470,9 @@ describe("test Tween", () => {
 		};
 		var tw = new Tween(target, {destroyed: d});
 		tw._loop = true;
-		expect(tw.destroyed()).toBe(false);
+		expect(tw.isFinished()).toBe(false);
 		dres = true;
-		expect(tw.destroyed()).toBe(true);
+		expect(tw.isFinished()).toBe(true);
 	});
 
 	it("push - no pararel", () => {
@@ -542,14 +542,14 @@ describe("test Tween", () => {
 		let count = 0;
 		const target = {x: 0, y: 0, destroyed: () => { count++; return false; }};
 		const tw = new Tween(target);
-		tw.destroyed();
+		tw.isFinished();
 		expect(count).toBe(1);
-		tw.destroyed();
+		tw.isFinished();
 		expect(count).toBe(2);
 		const twLoop = new Tween(target, {loop: true});
-		twLoop.destroyed();
+		twLoop.isFinished();
 		expect(count).toBe(3);
-		twLoop.destroyed();
+		twLoop.isFinished();
 		expect(count).toBe(4);
 	});
 });
