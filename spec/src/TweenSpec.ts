@@ -453,13 +453,23 @@ describe("test Tween", () => {
 	it("isFinished", () => {
 		var target = {x: 0, y: 0};
 		var tw = new Tween(target);
+		// 生成直後は終了していない
+		var ret = tw.isFinished();
+		expect(ret).toBe(false);
 		tw._loop = false;
-		expect(tw.isFinished()).toBe(true);
+		expect(tw.isFinished()).toBe(false);
 		tw._loop = true;
 		expect(tw.isFinished()).toBe(false);
-		tw._loop = false;
-		tw.to({x: 200, y: 300}, 1000);
+		// アニメーション途中
+		tw.to({ x: 200, y: 300 }, 500);
+		tw._fire(300);
 		expect(tw.isFinished()).toBe(false);
+		// アニメーション完了 loop=true
+		tw._fire(200);
+		expect(tw.isFinished()).toBe(false);
+		// アニメーション完了 loop=false
+		tw._loop = false;
+		expect(tw.isFinished()).toBe(true);
 	});
 
 	it("isFinished - destroyedHandler", () => {

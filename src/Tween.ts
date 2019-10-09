@@ -315,7 +315,7 @@ class Tween {
 			ret = this._destroyedHandler.call(this._target);
 		}
 		if (!ret) {
-			ret = this._stepIndex >= this._steps.length && !this._loop;
+			ret = this._stepIndex !== 0 && this._stepIndex >= this._steps.length && !this._loop;
 		}
 		return ret;
 	}
