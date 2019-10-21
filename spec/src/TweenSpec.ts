@@ -453,9 +453,8 @@ describe("test Tween", () => {
 	it("isFinished", () => {
 		var target = {x: 0, y: 0};
 		var tw = new Tween(target);
-		// 生成直後は終了していない
-		var ret = tw.isFinished();
-		expect(ret).toBe(false);
+		// インスタンス生成直後は終了していない
+		expect(tw.isFinished()).toBe(false);
 		tw._loop = false;
 		expect(tw.isFinished()).toBe(false);
 		tw._loop = true;
