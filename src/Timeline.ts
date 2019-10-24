@@ -82,7 +82,7 @@ class Timeline {
 		var tmp: Tween[] = [];
 		for (var i = 0; i < this._tweens.length; ++i) {
 			var tween = this._tweens[i];
-			if (!tween.destroyed()) {
+			if (!tween.isFinished()) {
 				tween._fire(1000 / this._fps);
 				tmp.push(tween);
 			}
