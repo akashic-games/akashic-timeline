@@ -13,6 +13,8 @@ class Game extends g.Game {
 	shouldSaveSnapshot(): boolean { return false; }
 	saveSnapshot(snapshot: any, timestamp?: number): void {}
 	_leaveGame(): void {}
+	getCurrentTime(): number { return 0; }
+	isActiveInstance(): boolean { return false; }
 }
 
 describe("test Tween", () => {
@@ -567,7 +569,7 @@ describe("test Tween serializeState", () => {
 	var scene: g.Scene = null;
 	var game: g.Game = null;
 	beforeEach(() => {
-		game = new Game({width: 320, height: 270, fps: 30}, null);
+		game = new Game({width: 320, height: 270, fps: 30, main: ""}, null);
 		scene = new g.Scene({ game: game });
 	});
 
