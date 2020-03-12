@@ -7,11 +7,10 @@
     "noImplicitAny": true,
     "outDir": "lib",
     "module": "commonjs",
-    "types": ["node"],
-    "allowUmdGlobalAccess": true
+    "types": ["node"]
   },
   "files": [
-    "./node_modules/@akashic/akashic-engine/index.runtime.d.ts"
+    "./node_modules/@akashic/akashic-engine/lib/main.d.ts"
   ],
   "include": [
     "src/**/*.ts"

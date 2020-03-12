@@ -80,5 +80,5 @@ module.exports = function() {
      .con()
      .rotateTo(0, 1000);
   });
-  g.game.pushScene(scene);
+  return scene;
 }
