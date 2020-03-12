@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased changes
+* akashic-engine@3.0.0 系に追従。あわせてバージョンを 3.0.0 に。
+
 ## 2.3.0
 * Tween#destroyed() を Tween#isFinished() へ Function 名を変更
 
