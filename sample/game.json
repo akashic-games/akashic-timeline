@@ -2,11 +2,10 @@
 	"width": 320,
 	"height": 320,
 	"fps": 30,
-	"main": "./script/main.js",
 	"assets": {
-		"main": {
+		"mainScene": {
 			"type": "script",
-			"path": "script/main.js",
+			"path": "script/mainScene.js",
 			"global": true
 		}
 	},
@@ -19,6 +18,6 @@
 		"node_modules/@akashic-extension/akashic-timeline/package.json"
 	],
 	"environment": {
-		"sandbox-runtime": "3"
+		"sandbox-runtime": "2"
 	}
 }

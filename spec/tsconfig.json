@@ -6,11 +6,10 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "outDir": "./build",
-    "types": ["node"],
-    "allowUmdGlobalAccess": true
+    "types": ["node"]
   },
   "files": [
-    "../node_modules/@akashic/akashic-engine/index.runtime.d.ts",
+    "../node_modules/@akashic/akashic-engine/lib/main.d.ts",
     "../node_modules/@types/jasmine/index.d.ts",
     "./src/TimelineSpec.ts",
     "./src/TweenSpec.ts"

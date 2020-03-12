@@ -9,8 +9,6 @@ class Game extends g.Game {
 	shouldSaveSnapshot(): boolean { return false; }
 	saveSnapshot(snapshot: any, timestamp?: number): void {}
 	_leaveGame(): void {}
-	getCurrentTime(): number { return 0; }
-	isActiveInstance(): boolean { return false; }
 }
 
 import Timeline = require("../../lib/Timeline");
@@ -18,7 +16,7 @@ import Timeline = require("../../lib/Timeline");
 describe("test Timeline", () => {
 	var scene: g.Scene = null;
 	beforeEach(() => {
-		var game = new Game({width: 320, height: 270, fps: 30, main: ""}, null);
+		var game = new Game({width: 320, height: 270, fps: 30}, null);
 		scene = new g.Scene({ game: game });
 	});
 
