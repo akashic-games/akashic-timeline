@@ -1,8 +1,5 @@
 # CHANGELOG
 
-## Unreleased changes
-* TypeDocで出力されるリファレンスにGAのトラッキングIDが付与されるように改修
-
 ## 2.3.0
 * Tween#destroyed() を Tween#isFinished() へ Function 名を変更
 
