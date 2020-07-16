@@ -4,18 +4,7 @@
 import Tween = require("../../lib/Tween");
 import Easing = require("../../lib/Easing");
 import Timeline = require("../../lib/Timeline");
-
-class Game extends g.Game {
-	raiseEvent(e: g.Event): void {}
-	raiseTick(events?: g.Event[]): void {}
-	addEventFilter(filter: g.EventFilter): void {}
-	removeEventFilter(filter: g.EventFilter): void {}
-	shouldSaveSnapshot(): boolean { return false; }
-	saveSnapshot(snapshot: any, timestamp?: number): void {}
-	_leaveGame(): void {}
-	getCurrentTime(): number { return 0; }
-	isActiveInstance(): boolean { return false; }
-}
+import { Game } from "./helpers/mock";
 
 describe("test Tween", () => {
 	beforeEach(() => {
@@ -566,10 +555,10 @@ describe("test Tween", () => {
 });
 
 describe("test Tween serializeState", () => {
-	var scene: g.Scene = null;
-	var game: g.Game = null;
+	let scene: g.Scene = null;
+	let game: g.Game = null;
 	beforeEach(() => {
-		game = new Game({width: 320, height: 270, fps: 30, main: ""}, null);
+		game = new Game({width: 320, height: 270, fps: 30, main: "", assets: {}}, null);
 		scene = new g.Scene({ game: game });
 	});
 
@@ -577,17 +566,17 @@ describe("test Tween serializeState", () => {
 	});
 
 	it("serializeState", () => {
-		var tl = new Timeline(scene);
-		var e = new g.E({
+		const tl = new Timeline(scene);
+		const e = new g.E({
 			scene: scene,
 			id: 10
 		});
 		scene.append(e);
-		var tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
-		var anyTw = <any>tween;
+		const tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
+		const anyTw = <any>tween;
 		tween.moveX(100,1000);
 		anyTw._initAction(anyTw._steps[0][0]);
-		var state = tween.serializeState();
+		const state = tween.serializeState();
 		expect(state._stepIndex).toBe(0);
 		expect(state._steps.length).toBe(1);
 		expect(state._steps[0][0].input).toEqual(anyTw._steps[0][0].input);
@@ -601,29 +590,29 @@ describe("test Tween serializeState", () => {
 	});
 
 	it("resume", () => {
-		var tl = new Timeline(scene);
-		var e = new g.E({
+		const tl = new Timeline(scene);
+		const e = new g.E({
 			scene: scene,
 			id: 10
 		});
 		scene.append(e);
-		var tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
+		const tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
 		tween.moveX(100,1000).moveX(100, 1000);
-		for (var i = 0; i<50; ++i) {
+		for (let i = 0; i < 50; ++i) {
 			scene.update.fire();
 		}
-		var state = tween.serializeState();
+		const state = tween.serializeState();
 
-		var e2 = new g.E({
+		const e2 = new g.E({
 			scene: scene,
 			id: 11
 		});
 		scene.append(e2);
-		var tween2 = tl.create(e2, {modified: e2.modified, destroyed: e2.destroyed});
+		const tween2 = tl.create(e2, {modified: e2.modified, destroyed: e2.destroyed});
 		tween2.moveX(100,1000).moveX(100, 1000);
 		tween2.deserializeState(state);
 		expect(tween2._stepIndex).toBe(1);
-		var anyTw = <any>tween2;
+		const anyTw = <any>tween2;
 		expect(state._steps[1][0].input).toEqual(anyTw._steps[1][0].input);
 		expect(state._steps[1][0].start).toEqual(anyTw._steps[1][0].start);
 		expect(state._steps[1][0].goal).toEqual(anyTw._steps[1][0].goal);
