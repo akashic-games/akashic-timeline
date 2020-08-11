@@ -225,6 +225,32 @@ timeline.create(rect)
 
 `modified` と `this` に関して、 `every` と同様に指定した関数を呼び出す `call` アクションや `cue` アクションでも同じです。
 
+## <a name="complete_and_cancel"></a> アクションの完了と取り消し
+
+何かしらの要因によりすべてのアクションを完了させたい場合は `complete()` を利用します。
+
+以下の例では、 `FilledRect` をタッチすると本来2秒掛けて透過度が0になるというアニメーションを即座に完了させることができます。
+
+```javascript
+var tween = timeline.create(rect)
+    .to({opacity: 0}, 2000);
+rect.pointDown.add(function() {
+    tween.complete();
+});
+```
+
+また、アニメーションをその時点で取り消したい場合は `cancel()` を利用します。
+
+以下の例では、 `FilledRect` をタッチするとアニメーションをその時点で停止することができます。
+
+```javascript
+var tween = timeline.create(rect)
+    .to({opacity: 0}, 2000);
+rect.pointDown.add(function() {
+    tween.cancel();
+});
+```
+
 ## <a name="Tweenの破棄タイミング"></a> Tweenの破棄タイミング
 
 `Tween` の破棄タイミングについて説明します。

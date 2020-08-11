@@ -46,6 +46,10 @@ class Tween {
 	 * 次に追加するアクションが並列実行か否か。
 	 */
 	private _pararel: boolean;
+	/**
+	 * `_target`の初期プロパティ。
+	 */
+	private _initialProp: any;
 
 	/**
 	 * Tweenを生成する。
@@ -71,6 +75,7 @@ class Tween {
 		this._steps = [];
 		this._lastStep = undefined;
 		this._pararel = false;
+		this._initialProp = {};
 
 		this.paused = false;
 	}
@@ -306,6 +311,61 @@ class Tween {
 	}
 
 	/**
+	 * このTweenに追加されたすべてのアクションを即座に完了する。
+	 * `Tween#loop`が`true`の場合、ループの終端までのアクションがすべて実行される。
+	 * ただし`Tween#every()`により追加された関数は実行されない点に注意。
+	 */
+	complete(): void {
+		for (let i = this._stepIndex; i < this._steps.length; ++i) {
+			for (let j = 0; j < this._steps[i].length; ++j) {
+				const action = this._steps[i][j];
+				if (!action.initialized) {
+					this._initAction(action);
+				}
+				const keys = Object.keys(action.goal);
+				for (let k = 0; k < keys.length; ++k) {
+					const key = keys[k];
+					this._target[key] = action.goal[key];
+				}
+				if (action.type === ActionType.Call && typeof action.func === "function") {
+					action.func.call(this._target);
+				}
+			}
+		}
+		this._stepIndex = this._steps.length;
+		this._loop = false;
+		this._lastStep = undefined;
+		this._pararel = false;
+		this.paused = false;
+		if (this._modifiedHandler) {
+			this._modifiedHandler.call(this._target);
+		}
+	}
+
+	/**
+	 * このTweenに追加されたすべてのアクションを取り消す。
+	 * `revert`を`true` にした場合、`Tween#call()`や`Tween#every()`により変更されたプロパティは戻らない点に注意。
+	 * @param revert ターゲットのプロパティをアクション開始前に戻すかどうか (指定しない場合は `false`)
+	 */
+	cancel(revert: boolean = false): void {
+		if (revert) {
+			const keys = Object.keys(this._initialProp);
+			for (let i = 0; i < keys.length; ++i) {
+				const key = keys[i];
+				this._target[key] = this._initialProp[key];
+			}
+		}
+		this._stepIndex = this._steps.length;
+		this._loop = false;
+		this._lastStep = undefined;
+		this._pararel = false;
+		this.paused = false;
+		if (this._modifiedHandler) {
+			this._modifiedHandler.call(this._target);
+		}
+	}
+
+	/**
 	 * アニメーションが終了しているかどうかを返す。
 	 * `_target`が破棄された場合又は、全アクションの実行が終了した場合に`true`を返す。
 	 */
@@ -363,6 +423,11 @@ class Tween {
 				var keys = Object.keys(action.goal);
 				for (var j = 0; j < keys.length; ++j) {
 					var key = keys[j];
+					// アクションにより undefined が指定されるケースと初期値を区別するため in 演算子を利用
+					// (number以外が指定されるケースは存在しないが念の為)
+					if (!(key in this._initialProp)) {
+						this._initialProp[key] = this._target[key];
+					}
 					if (action.elapsed >= action.duration) {
 						this._target[key] = action.goal[key];
 					} else {
