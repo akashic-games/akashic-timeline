@@ -57,7 +57,7 @@ class Timeline {
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
 			if (!tween.isFinished()) {
-				tween.complete();
+				tween.complete(1000 / this._fps);
 			}
 		}
 		this.clear();

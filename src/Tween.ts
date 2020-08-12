@@ -313,9 +313,10 @@ class Tween {
 	/**
 	 * このTweenに追加されたすべてのアクションを即座に完了する。
 	 * `Tween#loop`が`true`の場合、ループの終端までのアクションがすべて実行される。
-	 * ただし`Tween#every()`により追加された関数は実行されない点に注意。
+	 *
+	 * @param delta アニメーションの呼び出し間隔。省略時は`Tween#every()`により追加された関数は実行されない。
 	 */
-	complete(): void {
+	complete(delta?: number): void {
 		for (let i = this._stepIndex; i < this._steps.length; ++i) {
 			for (let j = 0; j < this._steps[i].length; ++j) {
 				const action = this._steps[i][j];
@@ -332,6 +333,15 @@ class Tween {
 				} else if (action.type === ActionType.Cue && action.cue) {
 					for (let k = 0; k < action.cue.length; ++k) {
 						action.cue[k].func.call(this._target);
+					}
+				} else if (action.type === ActionType.Every && typeof action.func === "function") {
+					while (action.elapsed < action.duration) {
+						action.elapsed += delta;
+						let progress = action.easing(action.elapsed, 0, 1, action.duration);
+						if (progress > 1) {
+							progress = 1;
+						}
+						action.func.call(this._target, action.elapsed, progress);
 					}
 				}
 			}
