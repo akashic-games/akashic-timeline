@@ -349,7 +349,8 @@ class Tween {
 
 	/**
 	 * このTweenに追加されたすべてのアクションを取り消す。
-	 * `revert`を`true` にした場合、`Tween#call()`や`Tween#every()`により変更されたプロパティは戻らない点に注意。
+	 * `revert`を`true` にした場合、ターゲットのプロパティをアクション開始前に戻す。
+	 * ただし`Tween#call()`や`Tween#every()`により変更されたプロパティは戻らない点に注意。
 	 * @param revert ターゲットのプロパティをアクション開始前に戻すかどうか (指定しない場合は `false`)
 	 */
 	cancel(revert: boolean = false): void {
