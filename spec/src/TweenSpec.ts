@@ -561,6 +561,17 @@ describe("test Tween", () => {
 			}
 		});
 
+		let elapsed: number;
+		let progress: number;
+		tw.every(
+			(e, p) => {
+				++calledCount;
+				elapsed = e;
+				progress = p;
+			},
+			1000
+		);
+
 		tw._fire(500);
 		tw._fire(500);
 		tw._fire(500);
@@ -572,7 +583,9 @@ describe("test Tween", () => {
 		expect(tw._target.y).toBe(200);
 		expect(tw._target.angle).toBe(0);
 		expect(modified).toBe(true);
-		expect(calledCount).toBe(6);
+		expect(calledCount).toBe(7);
+		expect(elapsed).toBe(1000);
+		expect(progress).toBe(1);
 		expect(tw.isFinished()).toBe(true);
 	});
 
