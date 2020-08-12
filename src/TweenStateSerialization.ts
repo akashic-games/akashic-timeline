@@ -2,6 +2,7 @@ import ActionType = require("./ActionType");
 
 interface TweenStateSerialization {
 	_stepIndex: number;
+	_initialProp: any;
 	_steps: {
 		input: any;
 		start: any;

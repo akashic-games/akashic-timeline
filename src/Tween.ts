@@ -471,6 +471,7 @@ class Tween {
 	serializeState(): TweenStateSerialization {
 		var tData: TweenStateSerialization = {
 			_stepIndex: this._stepIndex,
+			_initialProp: this._initialProp,
 			_steps: []
 		};
 		for (var i = 0; i < this._steps.length; ++i) {
@@ -498,6 +499,7 @@ class Tween {
 	 */
 	deserializeState(serializedState: TweenStateSerialization): void {
 		this._stepIndex = serializedState._stepIndex;
+		this._initialProp = serializedState._initialProp;
 		for (var i = 0; i < serializedState._steps.length; ++i) {
 			for (var j = 0; j < serializedState._steps[i].length; ++j) {
 				if (!serializedState._steps[i][j] || !this._steps[i][j]) continue;

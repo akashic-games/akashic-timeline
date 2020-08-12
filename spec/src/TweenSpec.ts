@@ -756,15 +756,18 @@ describe("test Tween serializeState", () => {
 		var tl = new Timeline(scene);
 		var e = new g.E({
 			scene: scene,
-			id: 10
+			id: 10,
+			x: 10,
+			y: 20
 		});
 		scene.append(e);
 		var tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
 		var anyTw = <any>tween;
-		tween.moveX(100,1000);
-		anyTw._initAction(anyTw._steps[0][0]);
+		tween.moveTo(100, 200, 1000);
+		tween._fire(100);
 		var state = tween.serializeState();
 		expect(state._stepIndex).toBe(0);
+		expect(state._initialProp).toEqual({x: 10, y: 20});
 		expect(state._steps.length).toBe(1);
 		expect(state._steps[0][0].input).toEqual(anyTw._steps[0][0].input);
 		expect(state._steps[0][0].start).toEqual(anyTw._steps[0][0].start);
@@ -784,7 +787,7 @@ describe("test Tween serializeState", () => {
 		});
 		scene.append(e);
 		var tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
-		tween.moveX(100,1000).moveX(100, 1000);
+		tween.moveX(100, 1000).moveY(100, 1000);
 		for (var i = 0; i<50; ++i) {
 			scene.update.fire();
 		}
@@ -796,10 +799,11 @@ describe("test Tween serializeState", () => {
 		});
 		scene.append(e2);
 		var tween2 = tl.create(e2, {modified: e2.modified, destroyed: e2.destroyed});
-		tween2.moveX(100,1000).moveX(100, 1000);
+		tween2.moveX(100, 1000).moveY(100, 1000);
 		tween2.deserializeState(state);
 		expect(tween2._stepIndex).toBe(1);
 		var anyTw = <any>tween2;
+		expect(state._initialProp).toEqual(anyTw._initialProp);
 		expect(state._steps[1][0].input).toEqual(anyTw._steps[1][0].input);
 		expect(state._steps[1][0].start).toEqual(anyTw._steps[1][0].start);
 		expect(state._steps[1][0].goal).toEqual(anyTw._steps[1][0].goal);
