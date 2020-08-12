@@ -251,6 +251,8 @@ rect.pointDown.add(function() {
 });
 ```
 
+特定の `Timeline` に紐付いたすべての `Tween` を完了させたい場合は `timeline.completeAll()` を、取り消したい場合は `timeline.cancel()` を利用することができます。
+
 ## <a name="Tweenの破棄タイミング"></a> Tweenの破棄タイミング
 
 `Tween` の破棄タイミングについて説明します。

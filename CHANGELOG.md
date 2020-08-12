@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 2.3.1
+* Timeline#completeAll(), Timeline#cancelAll() を追加
 * Tween#complete(), Tween#cancel() を追加
 
 ## 2.3.0
