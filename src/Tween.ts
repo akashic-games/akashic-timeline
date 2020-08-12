@@ -428,9 +428,9 @@ class Tween {
 				var keys = Object.keys(action.goal);
 				for (var j = 0; j < keys.length; ++j) {
 					var key = keys[j];
-					// アクションにより undefined が指定されるケースと初期値を区別するため in 演算子を利用
+					// アクションにより undefined が指定されるケースと初期値を区別するため Object.prototype.hasOwnProperty() を利用
 					// (number以外が指定されるケースは存在しないが念の為)
-					if (!(key in this._initialProp)) {
+					if (!this._initialProp.hasOwnProperty(key)) {
 						this._initialProp[key] = this._target[key];
 					}
 					if (action.elapsed >= action.duration) {
