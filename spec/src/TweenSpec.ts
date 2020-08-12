@@ -546,6 +546,20 @@ describe("test Tween", () => {
 		tw.con();
 		tw.rotateTo(0, 1000)
 		tw.call(() => { ++calledCount; });
+		tw.cue({
+			"0": () => {
+				++calledCount;
+			},
+			"100": () => {
+				++calledCount;
+			},
+			"1000": () => {
+				++calledCount;
+			},
+			"10000": () => {
+				++calledCount;
+			}
+		});
 
 		tw._fire(500);
 		tw._fire(500);
@@ -558,7 +572,7 @@ describe("test Tween", () => {
 		expect(tw._target.y).toBe(200);
 		expect(tw._target.angle).toBe(0);
 		expect(modified).toBe(true);
-		expect(calledCount).toBe(2);
+		expect(calledCount).toBe(6);
 		expect(tw.isFinished()).toBe(true);
 	});
 

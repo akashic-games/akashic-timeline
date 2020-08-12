@@ -329,6 +329,10 @@ class Tween {
 				}
 				if (action.type === ActionType.Call && typeof action.func === "function") {
 					action.func.call(this._target);
+				} else if (action.type === ActionType.Cue && action.cue) {
+					for (let k = 0; k < action.cue.length; ++k) {
+						action.cue[k].func.call(this._target);
+					}
 				}
 			}
 		}
