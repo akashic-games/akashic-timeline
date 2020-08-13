@@ -51,6 +51,37 @@ class Timeline {
 	}
 
 	/**
+	 * Timelineに紐付いた全Tweenのアクションを完了させる。詳細は `Tween#complete()`の説明を参照。
+	 */
+	completeAll(): void {
+		for (let i = 0; i < this._tweens.length; ++i) {
+			const tween = this._tweens[i];
+			if (!tween.isFinished()) {
+				tween.complete();
+			}
+		}
+		this.clear();
+	}
+
+	/**
+	 * Timelineに紐付いた全Tweenのアクションを取り消す。詳細は `Tween#cancel()`の説明を参照。
+	 * @param revert ターゲットのプロパティをアクション開始前に戻すかどうか (指定しない場合は `false`)
+	 */
+	cancelAll(revert: boolean = false): void {
+		if (!revert) {
+			this.clear();
+			return;
+		}
+		for (let i = 0; i < this._tweens.length; ++i) {
+			const tween = this._tweens[i];
+			if (!tween.isFinished()) {
+				tween.cancel(true);
+			}
+		}
+		this.clear();
+	}
+
+	/**
 	 * Timelineに紐付いた全Tweenの紐付けを解除する。
 	 */
 	clear(): void {

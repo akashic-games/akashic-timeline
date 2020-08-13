@@ -54,6 +54,48 @@ describe("test Timeline", () => {
 		expect(tl._tweens.length).toBe(0);
 	});
 
+	it("cancelAll", () => {
+		const tl = new Timeline(scene);
+		const target = {x: 100, y: 200};
+		const tween = tl.create(target);
+		tween.to({x: 200, y: 300}, 100);
+		scene.update.fire();
+		tl.cancelAll();
+		expect(target.x).toBeGreaterThan(100);
+		expect(target.x).toBeLessThanOrEqual(200);
+		expect(target.y).toBeGreaterThan(200);
+		expect(target.y).toBeLessThanOrEqual(300);
+	});
+
+	it("cancelAll - revert", () => {
+		const tl = new Timeline(scene);
+		const target = {x: 100, y: 200};
+		const tween = tl.create(target);
+		tween.to({x: 200, y: 300}, 100);
+		scene.update.fire();
+		tl.cancelAll(true);
+		expect(target.x).toBe(100);
+		expect(target.y).toBe(200);
+	});
+
+	it("completeAll", () => {
+		const tl = new Timeline(scene);
+		const target1 = {x: 100, y: 200};
+		const tw1 = tl.create(target1);
+		tw1.to({x: 200, y: 300}, 100);
+
+		const target2 = {x: 250, y: 250};
+		const tw2 = tl.create(target2);
+		tw2.to({x: 350, y: 350}, 100);
+		scene.update.fire();
+
+		tl.completeAll();
+		expect(target1.x).toBe(200);
+		expect(target1.y).toBe(300);
+		expect(target2.x).toBe(350);
+		expect(target2.y).toBe(350);
+	});
+
 	it("destroy", () => {
 		const tl = new Timeline(scene);
 		const tw1 = tl.create({x: 100, y: 200});

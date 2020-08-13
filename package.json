@@ -1,6 +1,6 @@
 {
   "name": "@akashic-extension/akashic-timeline",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
