@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.3.1
+* Timeline#completeAll(), Timeline#cancelAll() を追加
+* Tween#complete(), Tween#cancel() を追加
+
 ## 2.3.0
 * Tween#destroyed() を Tween#isFinished() へ Function 名を変更
 

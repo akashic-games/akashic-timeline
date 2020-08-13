@@ -526,6 +526,184 @@ describe("test Tween", () => {
 		expect(anyTw._lastStep[1]).toBe(action2);
 	});
 
+	it("complete", () => {
+		let calledCount = 0;
+		let modified = false;
+		const target = {
+			x: 0,
+			y: 0,
+			angle: 0,
+			modified: () => {
+				modified = true;
+			}
+		};
+		const tw = new Tween(target, {modified: target.modified});
+		tw.to({x: 100, y: 100}, 1000);
+		tw.con();
+		tw.rotateTo(180, 1000)
+		tw.call(() => { ++calledCount; });
+		tw.to({x: 200, y: 200}, 1000);
+		tw.con();
+		tw.rotateTo(0, 1000)
+		tw.call(() => { ++calledCount; });
+		tw.cue({
+			"0": () => {
+				++calledCount;
+			},
+			"100": () => {
+				++calledCount;
+			},
+			"1000": () => {
+				++calledCount;
+			},
+			"10000": () => {
+				++calledCount;
+			}
+		});
+
+		let elapsed: number;
+		let progress: number;
+		tw.every(
+			(e, p) => {
+				++calledCount;
+				elapsed = e;
+				progress = p;
+			},
+			1000
+		);
+
+		tw._fire(500);
+		tw._fire(500);
+		tw._fire(500);
+
+		modified = false; // complete() の呼び出しで modified() が呼ばれることを確認
+		tw.complete();
+
+		expect(tw._target.x).toBe(200);
+		expect(tw._target.y).toBe(200);
+		expect(tw._target.angle).toBe(0);
+		expect(modified).toBe(true);
+		expect(calledCount).toBe(7);
+		expect(elapsed).toBe(1000);
+		expect(progress).toBe(1);
+		expect(tw.isFinished()).toBe(true);
+	});
+
+	it("complete - loop", () => {
+		let modified = false;
+		let calledCount = 0;
+		const target = {
+			x: 0,
+			y: 0,
+			angle: 0,
+			modified: () => {
+				modified = true;
+			}
+		};
+		const tw = new Tween(target, {loop: true, modified: target.modified});
+		tw.to({x: 100, y: 100}, 1000);
+		tw.con();
+		tw.rotateTo(180, 1000);
+		tw.to({x: 200, y: 200}, 1000);
+		tw.call(() => { ++calledCount; });
+		tw.con();
+		tw.rotateTo(0, 1000);
+		tw.call(() => { ++calledCount; });
+
+		tw._fire(1500);
+		tw._fire(1500);
+		tw._fire(1500);
+
+		modified = false; // complete() の呼び出しで modified() が呼ばれることを確認
+		tw.complete();
+
+		expect(tw._target.x).toBe(200);
+		expect(tw._target.y).toBe(200);
+		expect(tw._target.angle).toBe(0);
+		expect(modified).toBe(true);
+		expect(calledCount).toBe(2);
+		expect(tw.isFinished()).toBe(true);
+	});
+
+	it("cancel", () => {
+		let modified = false;
+		let calledCount = 0;
+		const target = {
+			x: 0,
+			y: 0,
+			angle: 0,
+			modified: () => {
+				modified = true;
+			}
+		};
+		const tw = new Tween(target, {modified: target.modified});
+		tw.to({x: 100, y: 100}, 1000);
+		tw.con();
+		tw.rotateTo(180, 1000)
+		tw.call(() => { ++calledCount; });
+
+		tw._fire(500);
+
+		modified = false; // cancel() の呼び出しで modified() が呼ばれることを確認
+		tw.cancel();
+
+		expect(tw._target.x).toBe(50);
+		expect(tw._target.y).toBe(50);
+		expect(tw._target.angle).toBe(90);
+		expect(modified).toBe(true);
+		expect(calledCount).toBe(0);
+		expect(tw.isFinished()).toBe(true);
+	});
+
+	it("reverts the target's properties to initial value", () => {
+		let modified = false;
+		let calledCount = 0;
+		const target = {
+			x: 0,
+			y: 0,
+			angle: 0,
+			modified: () => {
+				modified = true;
+			}
+		};
+		const tw = new Tween(target, {modified: target.modified});
+		tw.to({x: 100, y: 100}, 1000);
+		tw.con();
+		tw.rotateTo(180, 1000);
+		tw.call(() => { ++calledCount; });
+		tw._fire(500);
+
+		modified = false; // cancel() の呼び出しで modified() が呼ばれることを確認
+		tw.cancel(true);
+
+		expect(tw._target.x).toBe(0);
+		expect(tw._target.y).toBe(0);
+		expect(tw._target.angle).toBe(0);
+		expect(modified).toBe(true);
+		expect(calledCount).toBe(0);
+		expect(tw.isFinished()).toBe(true);
+
+		modified = false;
+		calledCount = 0;
+
+		const twLoop = new Tween(target, {loop: true, modified: target.modified});
+		twLoop.to({x: 100, y: 100}, 1000);
+		twLoop.con();
+		twLoop.rotateTo(180, 1000);
+		twLoop.call(() => { ++calledCount; });
+		twLoop._fire(500);
+
+		modified = false; // cancel() の呼び出しで modified() が呼ばれることを確認
+		twLoop.cancel(true);
+
+		expect(tw._target.x).toBe(0);
+		expect(tw._target.y).toBe(0);
+		expect(tw._target.angle).toBe(0);
+		expect(modified).toBe(true);
+		expect(calledCount).toBe(0);
+		expect(tw.isFinished()).toBe(true);
+	});
+
 	it("calls target's modified(), when the modified option is omitted", () => {
 		let count = 0;
 		const target = {x: 0, y: 0, modified: () => { count++; }};
@@ -578,15 +756,18 @@ describe("test Tween serializeState", () => {
 		var tl = new Timeline(scene);
 		var e = new g.E({
 			scene: scene,
-			id: 10
+			id: 10,
+			x: 10,
+			y: 20
 		});
 		scene.append(e);
 		var tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
 		var anyTw = <any>tween;
-		tween.moveX(100,1000);
-		anyTw._initAction(anyTw._steps[0][0]);
+		tween.moveTo(100, 200, 1000);
+		tween._fire(100);
 		var state = tween.serializeState();
 		expect(state._stepIndex).toBe(0);
+		expect(state._initialProp).toEqual({x: 10, y: 20});
 		expect(state._steps.length).toBe(1);
 		expect(state._steps[0][0].input).toEqual(anyTw._steps[0][0].input);
 		expect(state._steps[0][0].start).toEqual(anyTw._steps[0][0].start);
@@ -606,7 +787,7 @@ describe("test Tween serializeState", () => {
 		});
 		scene.append(e);
 		var tween = tl.create(e, {modified: e.modified, destroyed: e.destroyed});
-		tween.moveX(100,1000).moveX(100, 1000);
+		tween.moveX(100, 1000).moveY(100, 1000);
 		for (var i = 0; i<50; ++i) {
 			scene.update.fire();
 		}
@@ -618,10 +799,11 @@ describe("test Tween serializeState", () => {
 		});
 		scene.append(e2);
 		var tween2 = tl.create(e2, {modified: e2.modified, destroyed: e2.destroyed});
-		tween2.moveX(100,1000).moveX(100, 1000);
+		tween2.moveX(100, 1000).moveY(100, 1000);
 		tween2.deserializeState(state);
 		expect(tween2._stepIndex).toBe(1);
 		var anyTw = <any>tween2;
+		expect(state._initialProp).toEqual(anyTw._initialProp);
 		expect(state._steps[1][0].input).toEqual(anyTw._steps[1][0].input);
 		expect(state._steps[1][0].start).toEqual(anyTw._steps[1][0].start);
 		expect(state._steps[1][0].goal).toEqual(anyTw._steps[1][0].goal);
