@@ -22,7 +22,7 @@
     "lib"
   ],
   "devDependencies": {
-    "@akashic/akashic-engine": "~3.0.0-beta.28",
+    "@akashic/akashic-engine": "~3.0.0-beta.33",
     "@types/jasmine": "^2.8.8",
     "@types/node": "6.0.46",
     "istanbul": "^0.4.5",
