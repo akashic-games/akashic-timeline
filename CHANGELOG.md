@@ -10,6 +10,10 @@
 ## 3.0.0-beta.0
 * akashic-engine@3.0.0 系に追従。あわせてバージョンを 3.0.0 に。
 
+## 2.3.1
+* Timeline#completeAll(), Timeline#cancelAll() を追加
+* Tween#complete(), Tween#cancel() を追加
+
 ## 2.3.0
 * Tween#destroyed() を Tween#isFinished() へ Function 名を変更
 

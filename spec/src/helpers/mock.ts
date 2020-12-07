@@ -27,8 +27,8 @@ export class Game extends g.Game {
 export class GameHandlerSet implements g.GameHandlerSet {
 	raiseTick(events?: any[]): void {}
 	raiseEvent(event: any): void {}
-	addEventFilter(func: (pevs: any[]) => any[], _handleEmpty?: boolean): void {}
-	removeEventFilter(func: (pevs: any[]) => any[]): void {}
+	addEventFilter(func: g.EventFilter, _handleEmpty?: boolean): void {}
+	removeEventFilter(func: g.EventFilter): void {}
 	removeAllEventFilters(): void {}
 	changeSceneMode(mode: g.SceneMode): void {}
 	shouldSaveSnapshot(): boolean {
