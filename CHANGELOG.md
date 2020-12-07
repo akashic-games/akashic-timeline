@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 3.0.0
+* akashic-engine@3.0.0-beta.28 に追従
+
 ## 3.0.0-beta.2
 * Timeline#completeAll(), Timeline#cancelAll() を追加
 * Tween#complete(), Tween#cancel() を追加
