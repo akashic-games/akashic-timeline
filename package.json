@@ -1,6 +1,6 @@
 {
   "name": "@akashic-extension/akashic-timeline",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
@@ -22,17 +22,17 @@
     "lib"
   ],
   "devDependencies": {
-    "@types/node": "6.0.46",
-    "@akashic/akashic-engine": "~2.3.0",
+    "@akashic/akashic-engine": "~3.0.0",
     "@types/jasmine": "^2.8.8",
+    "@types/node": "6.0.46",
     "istanbul": "^0.4.5",
     "jasmine": "~2.8.0",
     "remark-cli": "~2.0.0",
     "remark-lint": "~5.0.1",
     "rimraf": "^2.6.1",
     "tslint": "^5.4.3",
-    "typedoc": "^0.8.0",
-    "typescript": "^2.1.6"
+    "typedoc": "^0.17.8",
+    "typescript": "^3.8.3"
   },
   "typings": "lib/index.d.ts",
   "repository": {

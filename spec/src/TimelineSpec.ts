@@ -1,22 +1,13 @@
 // NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
 (<any>global).g = require("@akashic/akashic-engine");
 
-class Game extends g.Game {
-	raiseEvent(e: g.Event): void {}
-	raiseTick(events?: g.Event[]): void {}
-	addEventFilter(filter: g.EventFilter): void {}
-	removeEventFilter(filter: g.EventFilter): void {}
-	shouldSaveSnapshot(): boolean { return false; }
-	saveSnapshot(snapshot: any, timestamp?: number): void {}
-	_leaveGame(): void {}
-}
-
 import Timeline = require("../../lib/Timeline");
+import { Game } from "./helpers/mock";
 
 describe("test Timeline", () => {
-	var scene: g.Scene = null;
+	let scene: g.Scene = null;
 	beforeEach(() => {
-		var game = new Game({width: 320, height: 270, fps: 30}, null);
+		const game = new Game({width: 320, height: 270, fps: 30, main: "", assets: {}}, null);
 		scene = new g.Scene({ game: game });
 	});
 
@@ -24,7 +15,7 @@ describe("test Timeline", () => {
 	});
 
 	it("constructor", () => {
-		var tl = new Timeline(scene);
+		const tl = new Timeline(scene);
 		expect(tl._scene).toBe(scene);
 		expect(tl._tweens.length).toBe(0);
 		expect(tl._fps).toEqual(scene.game.fps);
@@ -32,18 +23,18 @@ describe("test Timeline", () => {
 	});
 
 	it("create", () => {
-		var tl = new Timeline(scene);
-		var tw1 = tl.create({x: 100, y: 200});
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		var tw2 = tl.create({x: 300, y: 400});
+		const tw2 = tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 	});
 
 	it("remove", () => {
-		var tl = new Timeline(scene);
-		var tw1 = tl.create({x: 100, y: 200});
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		var tw2 = tl.create({x: 300, y: 400});
+		const tw2 = tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		tl.remove(tw1);
 		expect(tl._tweens.length).toBe(1);
@@ -54,10 +45,10 @@ describe("test Timeline", () => {
 	});
 
 	it("clear", () => {
-		var tl = new Timeline(scene);
-		var tw1 = tl.create({x: 100, y: 200});
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		var tw2 = tl.create({x: 300, y: 400});
+		const tw2 = tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		tl.clear();
 		expect(tl._tweens.length).toBe(0);
@@ -106,10 +97,10 @@ describe("test Timeline", () => {
 	});
 
 	it("destroy", () => {
-		var tl = new Timeline(scene);
-		var tw1 = tl.create({x: 100, y: 200});
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		var tw2 = tl.create({x: 300, y: 400});
+		const tw2 = tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		expect(scene.update.contains(tl._handler, tl)).toBe(true);
 		tl.destroy();
@@ -119,10 +110,10 @@ describe("test Timeline", () => {
 	});
 
 	it("destroy - scene already destroyed", () => {
-		var tl = new Timeline(scene);
-		var tw1 = tl.create({x: 100, y: 200});
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		var tw2 = tl.create({x: 300, y: 400});
+		const tw2 = tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		scene.destroy();
 		tl.destroy();
@@ -131,17 +122,17 @@ describe("test Timeline", () => {
 	});
 
 	it("destroyed", () => {
-		var tl = new Timeline(scene);
+		const tl = new Timeline(scene);
 		expect(tl.destroyed()).toBe(false);
 		tl.destroy();
 		expect(tl.destroyed()).toBe(true);
 	});
 
 	it("_handler - fire", () => {
-		var tl = new Timeline(scene);
-		var tw = tl.create({x: 100, y: 200});
-		var firedFps = 0;
-		var firedCount = 0;
+		const tl = new Timeline(scene);
+		const tw = tl.create({x: 100, y: 200});
+		let firedFps = 0;
+		let firedCount = 0;
 		tw.isFinished = () => {
 			return false;
 		};
@@ -160,15 +151,15 @@ describe("test Timeline", () => {
 	});
 
 	it("_handler - auto remove", () => {
-		var tl = new Timeline(scene);
-		var tw1 = tl.create({x: 100, y: 200});
-		var tw1d = false;
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
+		let tw1d = false;
 		tw1.isFinished = () => {
 			return tw1d;
 		};
 		expect(tl._tweens.length).toBe(1);
-		var tw2 = tl.create({x: 300, y: 400});
-		var tw2d = false;
+		const tw2 = tl.create({x: 300, y: 400});
+		let tw2d = false;
 		tw2.isFinished = () => {
 			return tw2d;
 		};
