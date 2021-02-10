@@ -1,9 +1,9 @@
 // NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
 (<any>global).g = require("@akashic/akashic-engine");
 
-import Tween = require("../../lib/Tween");
 import Easing = require("../../lib/Easing");
 import Timeline = require("../../lib/Timeline");
+import Tween = require("../../lib/Tween");
 import { Game } from "./helpers/mock";
 
 describe("test Tween", () => {
@@ -33,7 +33,9 @@ describe("test Tween", () => {
 		var target = {x: 100, y: 200};
 		var tweenOption = {
 			modified: () => {},
-			destroyed: () => { return false; }
+			destroyed: () => {
+				return false;
+			}
 		};
 		var tw = new Tween(target, tweenOption);
 		expect(tw._target).toBe(target);
@@ -531,12 +533,16 @@ describe("test Tween", () => {
 		const tw = new Tween(target, {modified: target.modified});
 		tw.to({x: 100, y: 100}, 1000);
 		tw.con();
-		tw.rotateTo(180, 1000)
-		tw.call(() => { ++calledCount; });
+		tw.rotateTo(180, 1000);
+		tw.call(() => {
+			++calledCount;
+		});
 		tw.to({x: 200, y: 200}, 1000);
 		tw.con();
-		tw.rotateTo(0, 1000)
-		tw.call(() => { ++calledCount; });
+		tw.rotateTo(0, 1000);
+		tw.call(() => {
+			++calledCount;
+		});
 		tw.cue({
 			"0": () => {
 				++calledCount;
@@ -596,10 +602,14 @@ describe("test Tween", () => {
 		tw.con();
 		tw.rotateTo(180, 1000);
 		tw.to({x: 200, y: 200}, 1000);
-		tw.call(() => { ++calledCount; });
+		tw.call(() => {
+			++calledCount;
+		});
 		tw.con();
 		tw.rotateTo(0, 1000);
-		tw.call(() => { ++calledCount; });
+		tw.call(() => {
+			++calledCount;
+		});
 
 		tw._fire(1500);
 		tw._fire(1500);
@@ -630,8 +640,10 @@ describe("test Tween", () => {
 		const tw = new Tween(target, {modified: target.modified});
 		tw.to({x: 100, y: 100}, 1000);
 		tw.con();
-		tw.rotateTo(180, 1000)
-		tw.call(() => { ++calledCount; });
+		tw.rotateTo(180, 1000);
+		tw.call(() => {
+			++calledCount;
+		});
 
 		tw._fire(500);
 
@@ -661,7 +673,9 @@ describe("test Tween", () => {
 		tw.to({x: 100, y: 100}, 1000);
 		tw.con();
 		tw.rotateTo(180, 1000);
-		tw.call(() => { ++calledCount; });
+		tw.call(() => {
+			++calledCount;
+		});
 		tw._fire(500);
 
 		modified = false; // cancel() の呼び出しで modified() が呼ばれることを確認
@@ -681,7 +695,9 @@ describe("test Tween", () => {
 		twLoop.to({x: 100, y: 100}, 1000);
 		twLoop.con();
 		twLoop.rotateTo(180, 1000);
-		twLoop.call(() => { ++calledCount; });
+		twLoop.call(() => {
+			++calledCount;
+		});
 		twLoop._fire(500);
 
 		modified = false; // cancel() の呼び出しで modified() が呼ばれることを確認
@@ -697,7 +713,9 @@ describe("test Tween", () => {
 
 	it("calls target's modified(), when the modified option is omitted", () => {
 		let count = 0;
-		const target = {x: 0, y: 0, modified: () => { count++; }};
+		const target = {x: 0, y: 0, modified: () => {
+			count++;
+		}};
 		const tw = new Tween(target);
 		tw.to({x: 200, y: 300}, 600, Easing.easeInOutCirc);
 		tw._fire(200);
@@ -718,7 +736,9 @@ describe("test Tween", () => {
 
 	it("calls target's destroyed(), when the destroyed option is omitted", () => {
 		let count = 0;
-		const target = {x: 0, y: 0, destroyed: () => { count++; return false; }};
+		const target = {x: 0, y: 0, destroyed: () => {
+			count++; return false;
+		}};
 		const tw = new Tween(target);
 		tw.isFinished();
 		expect(count).toBe(1);

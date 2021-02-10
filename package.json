@@ -10,7 +10,7 @@
     "build": "tsc -p ./",
     "doc": "typedoc --out ./doc --gaID UA-162208211-1",
     "lint": "npm run lint:ts && npm run lint:md",
-    "lint:ts": "eslint -c .eslintrc src/**/*.ts --fix",
+    "lint:ts": "eslint src/**/*.ts spec/**/*.ts --fix",
     "lint:md": "remark ./*.md --frail --no-stdout --quiet --rc-path ./.remarkrc",
     "test": "npm run test:compile && npm run test:jasmine && npm run lint",
     "test:compile": "cd spec/ && tsc && cd ../",
