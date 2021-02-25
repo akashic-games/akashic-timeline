@@ -4,7 +4,7 @@
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "gulp clean && gulp install:typings:src && gulp compile",
+    "prepare": "gulp clean && gulp install:typings:src && gulp compile",
     "clean:typings": "gulp clean:typings",
     "build": "gulp compile",
     "doc": "gulp typedoc",
@@ -41,6 +41,7 @@
     "url": "https://github.com/akashic-games/akashic-timeline.git"
   },
   "publishConfig": {
-    "@akashic-extension:registry": "http://registry.npmjs.org/"
+    "@akashic-extension:registry": "http://registry.npmjs.org/",
+    "tag": "for_ae1x"
   }
 }
