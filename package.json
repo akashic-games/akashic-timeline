@@ -4,8 +4,7 @@
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run clean && npm run build",
-    "prepare": "npm run prepublish",
+    "prepare": "npm run clean && npm run build",
     "clean": "rimraf lib && rimraf spec/build",
     "build": "tsc -p ./",
     "doc": "typedoc --out ./doc --gaID UA-162208211-1",
@@ -40,6 +39,7 @@
     "url": "https://github.com/akashic-games/akashic-timeline.git"
   },
   "publishConfig": {
-    "@akashic-extension:registry": "https://registry.npmjs.org/"
+    "@akashic-extension:registry": "https://registry.npmjs.org/",
+    "tag": "for_ae2x"
   }
 }
