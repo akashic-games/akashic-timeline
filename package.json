@@ -4,8 +4,7 @@
   "description": "timeline library for akashic",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run clean && npm run build",
-    "prepare": "npm run prepublish",
+    "prepare": "npm run clean && npm run build",
     "clean": "rimraf lib && rimraf spec/build",
     "build": "tsc -p ./",
     "doc": "typedoc --out ./doc --gaID UA-162208211-1",
