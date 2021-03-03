@@ -1,4 +1,4 @@
-enum ActionType {
+export enum ActionType {
 	Wait,
 	Call,
 	TweenTo,
@@ -7,5 +7,3 @@ enum ActionType {
 	Cue,
 	Every
 }
-
-export = ActionType;

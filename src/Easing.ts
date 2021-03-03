@@ -2,7 +2,7 @@
  * Easing関数群。
  * 参考: http://gizma.com/easing/
  */
-module Easing {
+export module Easing {
 
 	/**
 	 * 入力値をlinearした結果の現在位置を返す。
@@ -268,5 +268,3 @@ module Easing {
 		return c / 2 * (Math.sqrt(1 - t * t) + 1) + b;
 	}
 }
-
-export = Easing;

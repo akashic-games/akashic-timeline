@@ -1,10 +1,10 @@
-import Tween = require("./Tween");
-import TweenOption = require("./TweenOption");
+import { Tween } from "./Tween";
+import { TweenOption } from "./TweenOption";
 
 /**
  * タイムライン機能を提供するクラス。
  */
-class Timeline {
+export class Timeline {
 	/**
 	 * タイムラインが一時停止状態かどうかを表すフラグ。
 	 * タイムラインを一時停止する場合は`true`をセットする。
@@ -121,5 +121,3 @@ class Timeline {
 		this._tweens = tmp;
 	}
 }
-
-export = Timeline;

@@ -1,18 +1,12 @@
 // NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
 (<any>global).g = require("@akashic/akashic-engine");
 
-import Easing = require("../../lib/Easing");
-import Timeline = require("../../lib/Timeline");
-import Tween = require("../../lib/Tween");
+import { Easing } from "../../lib/Easing";
+import { Timeline } from "../../lib/Timeline";
+import { Tween } from "../../lib/Tween";
 import { Game } from "./helpers/mock";
 
 describe("test Tween", () => {
-	beforeEach(() => {
-	});
-
-	afterEach(() => {
-	});
-
 	it("constructor", () => {
 		var target = {x: 100, y: 200};
 		var tw = new Tween(target);
@@ -88,7 +82,7 @@ describe("test Tween", () => {
 	it("to - modifiedHandler", () => {
 		var target = {x: 0, y: 0};
 		var count = 0;
-		var m = () => {
+		var m = (): void => {
 			count++;
 		};
 		var tw = new Tween(target, {modified: m});
@@ -163,7 +157,7 @@ describe("test Tween", () => {
 	it("by - modifiedHandler", () => {
 		var target = {x: 0, y: 0};
 		var count = 0;
-		var m = () => {
+		var m = (): void => {
 			count++;
 		};
 		var tw = new Tween(target, {modified: m});
@@ -190,7 +184,9 @@ describe("test Tween", () => {
 			.con()
 			.rotateTo(180, 200, Easing.easeInQuint);
 		tw._fire(100);
-		expect(tw._target).toEqual({x: Easing.easeInQubic(100, 100, 200, 200), y: Easing.easeInQubic(100, 200, 200, 200), angle: Easing.easeInQuint(100, 0, 180, 200)});
+		expect(tw._target).toEqual({x: Easing.easeInQubic(100, 100, 200, 200),
+			y: Easing.easeInQubic(100, 200, 200, 200),
+			angle: Easing.easeInQuint(100, 0, 180, 200)});
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 300, y: 400, angle: 180});
 	});
@@ -215,7 +211,7 @@ describe("test Tween", () => {
 		var target = {x: 100, y: 200};
 		var tw = new Tween(target);
 		var count = {x: 0, y: 0};
-		var call = () => {
+		var call = (): void => {
 			count.x = target.x;
 			count.y = target.y;
 		};
@@ -467,7 +463,7 @@ describe("test Tween", () => {
 	it("isFinished - destroyedHandler", () => {
 		var target = {x: 0, y: 0};
 		var dres = false;
-		var d = () => {
+		var d = (): boolean => {
 			return dres;
 		};
 		var tw = new Tween(target, {destroyed: d});

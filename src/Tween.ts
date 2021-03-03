@@ -1,8 +1,8 @@
-import ActionType = require("./ActionType");
-import Easing = require("./Easing");
-import EasingType = require("./EasingType");
-import TweenOption = require("./TweenOption");
-import TweenStateSerialization = require("./TweenStateSerialization");
+import { ActionType } from "./ActionType";
+import { Easing }  from "./Easing";
+import { EasingType } from "./EasingType";
+import { TweenOption } from "./TweenOption";
+import { TweenStateSerialization } from "./TweenStateSerialization";
 
 interface TweenAction {
 	input?: any;
@@ -23,7 +23,7 @@ interface TweenAction {
  * オブジェクトの状態を変化させるアクションを定義するクラス。
  * 本クラスのインスタンス生成には`Timeline#create()`を利用する。
  */
-class Tween {
+export class Tween {
 	/**
 	 * アクションの実行が一時停止状態かどうかを表すフラグ。
 	 * 一時停止する場合は`true`をセットする。
@@ -437,7 +437,12 @@ class Tween {
 						if (action.elapsed >= action.duration) {
 							this._target[key] = action.goal[key];
 						} else {
-							this._target[key] = action.easing(action.elapsed, action.start[key], action.goal[key] - action.start[key], action.duration);
+							this._target[key] = action.easing(
+								action.elapsed,
+								action.start[key],
+								action.goal[key] - action.start[key],
+								action.duration
+							);
 						}
 					}
 					break;
@@ -559,5 +564,3 @@ class Tween {
 		}
 	}
 }
-
-export = Tween;
