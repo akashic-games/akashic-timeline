@@ -9,7 +9,6 @@
     "module": "commonjs"
   },
   "files": [
-    "./node_modules/typescript/lib/lib.es6.d.ts",
     "./node_modules/@akashic/akashic-engine/lib/main.d.ts",
     "./src/index.ts",
     "./src/Timeline.ts",
