@@ -53,7 +53,7 @@ akashic-sandbox .
 
 **akashic-timeline**はTypeScriptで書かれたライブラリであるため、ビルドにはnode.jsが必要です。
 
-`npm run build` によりgulpを使ってビルドできます。
+`npm run build` によりビルドできます。
 
 ```sh
 npm install
