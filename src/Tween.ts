@@ -1,8 +1,8 @@
-import TweenOption = require("./TweenOption");
-import Easing = require("./Easing");
-import EasingType = require("./EasingType");
-import TweenStateSerialization = require("./TweenStateSerialization");
-import ActionType = require("./ActionType");
+import { ActionType } from "./ActionType";
+import { Easing }  from "./Easing";
+import { EasingType } from "./EasingType";
+import { TweenOption } from "./TweenOption";
+import { TweenStateSerialization } from "./TweenStateSerialization";
 
 interface TweenAction {
 	input?: any;
@@ -23,7 +23,7 @@ interface TweenAction {
  * オブジェクトの状態を変化させるアクションを定義するクラス。
  * 本クラスのインスタンス生成には`Timeline#create()`を利用する。
  */
-class Tween {
+export class Tween {
 	/**
 	 * アクションの実行が一時停止状態かどうかを表すフラグ。
 	 * 一時停止する場合は`true`をセットする。
@@ -413,41 +413,46 @@ class Tween {
 			}
 			action.elapsed += delta;
 			switch (action.type) {
-			case ActionType.Call:
-				action.func.call(this._target);
-				break;
-			case ActionType.Every:
-				var progress = action.easing(action.elapsed, 0, 1, action.duration);
-				if (progress > 1) {
-					progress = 1;
-				}
-				action.func.call(this._target, action.elapsed, progress);
-				break;
-			case ActionType.TweenTo:
-			case ActionType.TweenBy:
-			case ActionType.TweenByMult:
-				var keys = Object.keys(action.goal);
-				for (var j = 0; j < keys.length; ++j) {
-					var key = keys[j];
-					// アクションにより undefined が指定されるケースと初期値を区別するため Object.prototype.hasOwnProperty() を利用
-					// (number以外が指定されるケースは存在しないが念の為)
-					if (!this._initialProp.hasOwnProperty(key)) {
-						this._initialProp[key] = this._target[key];
+				case ActionType.Call:
+					action.func.call(this._target);
+					break;
+				case ActionType.Every:
+					var progress = action.easing(action.elapsed, 0, 1, action.duration);
+					if (progress > 1) {
+						progress = 1;
 					}
-					if (action.elapsed >= action.duration) {
-						this._target[key] = action.goal[key];
-					} else {
-						this._target[key] = action.easing(action.elapsed, action.start[key], action.goal[key] - action.start[key], action.duration);
+					action.func.call(this._target, action.elapsed, progress);
+					break;
+				case ActionType.TweenTo:
+				case ActionType.TweenBy:
+				case ActionType.TweenByMult:
+					var keys = Object.keys(action.goal);
+					for (var j = 0; j < keys.length; ++j) {
+						var key = keys[j];
+						// アクションにより undefined が指定されるケースと初期値を区別するため Object.prototype.hasOwnProperty() を利用
+						// (number以外が指定されるケースは存在しないが念の為)
+						if (!this._initialProp.hasOwnProperty(key)) {
+							this._initialProp[key] = this._target[key];
+						}
+						if (action.elapsed >= action.duration) {
+							this._target[key] = action.goal[key];
+						} else {
+							this._target[key] = action.easing(
+								action.elapsed,
+								action.start[key],
+								action.goal[key] - action.start[key],
+								action.duration
+							);
+						}
 					}
-				}
-				break;
-			case ActionType.Cue:
-				var cueAction = action.cue[action.cueIndex];
-				if (cueAction !== undefined && action.elapsed >= cueAction.time) {
-					cueAction.func.call(this._target);
-					++action.cueIndex;
-				}
-				break;
+					break;
+				case ActionType.Cue:
+					var cueAction = action.cue[action.cueIndex];
+					if (cueAction !== undefined && action.elapsed >= cueAction.time) {
+						cueAction.func.call(this._target);
+						++action.cueIndex;
+					}
+					break;
 			}
 			if (this._modifiedHandler) {
 				this._modifiedHandler.call(this._target);
@@ -559,5 +564,3 @@ class Tween {
 		}
 	}
 }
-
-export = Tween;

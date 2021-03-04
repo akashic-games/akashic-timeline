@@ -1,5 +1,5 @@
-export import Timeline = require("./Timeline");
-export import Tween = require("./Tween");
-export import TweenOption = require("./TweenOption");
-export import Easing = require("./Easing");
-export import TweenStateSerialization = require("./TweenStateSerialization");
+export { Timeline } from "./Timeline";
+export { Tween } from "./Tween";
+export { TweenOption } from "./TweenOption";
+export { Easing } from "./Easing";
+export { TweenStateSerialization } from "./TweenStateSerialization";

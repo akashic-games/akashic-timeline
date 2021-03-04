@@ -1,7 +1,7 @@
 /**
  * Tweenに指定するオプション。
  */
-interface TweenOption {
+export interface TweenOption {
 	/**
 	 * ループ実行するかどうかを指定する。
 	 * `false`を指定した場合、全アクションが終了後、`Tween`は`Timeline`から削除される。
@@ -23,5 +23,3 @@ interface TweenOption {
 	 */
 	destroyed?: () => boolean;
 }
-
-export = TweenOption;

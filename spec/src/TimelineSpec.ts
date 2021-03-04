@@ -1,7 +1,7 @@
 // NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
 (<any>global).g = require("@akashic/akashic-engine");
 
-import Timeline = require("../../lib/Timeline");
+import { Timeline } from "../../lib/Timeline";
 import { Game } from "./helpers/mock";
 
 describe("test Timeline", () => {
@@ -9,9 +9,6 @@ describe("test Timeline", () => {
 	beforeEach(() => {
 		const game = new Game({width: 320, height: 270, fps: 30, main: "", assets: {}}, null);
 		scene = new g.Scene({ game: game });
-	});
-
-	afterEach(() => {
 	});
 
 	it("constructor", () => {
@@ -24,9 +21,9 @@ describe("test Timeline", () => {
 
 	it("create", () => {
 		const tl = new Timeline(scene);
-		const tw1 = tl.create({x: 100, y: 200});
+		tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		const tw2 = tl.create({x: 300, y: 400});
+		tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 	});
 
@@ -46,9 +43,9 @@ describe("test Timeline", () => {
 
 	it("clear", () => {
 		const tl = new Timeline(scene);
-		const tw1 = tl.create({x: 100, y: 200});
+		tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		const tw2 = tl.create({x: 300, y: 400});
+		tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		tl.clear();
 		expect(tl._tweens.length).toBe(0);
@@ -98,9 +95,9 @@ describe("test Timeline", () => {
 
 	it("destroy", () => {
 		const tl = new Timeline(scene);
-		const tw1 = tl.create({x: 100, y: 200});
+		tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		const tw2 = tl.create({x: 300, y: 400});
+		tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		expect(scene.update.contains(tl._handler, tl)).toBe(true);
 		tl.destroy();
@@ -111,9 +108,9 @@ describe("test Timeline", () => {
 
 	it("destroy - scene already destroyed", () => {
 		const tl = new Timeline(scene);
-		const tw1 = tl.create({x: 100, y: 200});
+		tl.create({x: 100, y: 200});
 		expect(tl._tweens.length).toBe(1);
-		const tw2 = tl.create({x: 300, y: 400});
+		tl.create({x: 300, y: 400});
 		expect(tl._tweens.length).toBe(2);
 		scene.destroy();
 		tl.destroy();

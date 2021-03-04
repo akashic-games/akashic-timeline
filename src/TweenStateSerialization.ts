@@ -1,6 +1,6 @@
-import ActionType = require("./ActionType");
+import { ActionType } from "./ActionType";
 
-interface TweenStateSerialization {
+export interface TweenStateSerialization {
 	_stepIndex: number;
 	_initialProp: any;
 	_steps: {
@@ -15,5 +15,3 @@ interface TweenStateSerialization {
 		finished: boolean;
 	}[][];
 }
-
-export = TweenStateSerialization;
