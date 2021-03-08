@@ -9,8 +9,6 @@
   "files": [
     "../node_modules/typescript/lib/lib.d.ts",
     "../node_modules/@akashic/akashic-engine/lib/main.d.ts",
-    "../node_modules/@types/jasmine/index.d.ts",
-    "../node_modules/@types/node/index.d.ts",
     "./src/TimelineSpec.ts",
     "./src/TweenSpec.ts"
   ]
