@@ -2,21 +2,14 @@
   "compilerOptions": {
     "target": "ES5",
     "declaration": true,
-    "noLib": true,
+    "noLib": false,
+    "lib": ["ES6"],
     "noImplicitAny": true,
     "outDir": "lib",
     "module": "commonjs"
   },
-  "filesGlob": [
-    "./node_modules/typescript/lib/lib.es6.d.ts",
-    "./node_modules/@akashic/akashic-engine/lib/main.d.ts",
-    "./typings/**/*.ts",
-    "./src/**/*.ts"
-  ],
   "files": [
-    "./node_modules/typescript/lib/lib.es6.d.ts",
     "./node_modules/@akashic/akashic-engine/lib/main.d.ts",
-    "./typings/index.d.ts",
     "./src/index.ts",
     "./src/Timeline.ts",
     "./src/Tween.ts",
