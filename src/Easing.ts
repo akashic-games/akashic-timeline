@@ -267,4 +267,45 @@ export module Easing {
 		t -= 2;
 		return c / 2 * (Math.sqrt(1 - t * t) + 1) + b;
 	}
+
+	/**
+	 * 入力値を easeInOutBack した結果の現在位置を返す。
+	 * @param t 経過時間
+	 * @param b 開始位置
+	 * @param c 終了位置
+	 * @param d 所要時間
+	 */
+	export function easeInOutBack(t: number, b: number, c: number, d: number): number {
+		const x = t / d;
+		const c1 = 1.70158;
+		const c2 = c1 * 1.525;
+		const v = x < 0.5
+			? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
+			: (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+		return b + c * v;
+	}
+
+	/**
+	 * 入力値を easeOutBounce した結果の現在位置を返す。
+	 * @param t 経過時間
+	 * @param b 開始位置
+	 * @param c 終了位置
+	 * @param d 所要時間
+	 */
+	export function easeOutBounce(t: number, b: number, c: number, d: number): number {
+		let x = t / d;
+		const n1 = 7.5625;
+		const d1 = 2.75;
+		let v;
+		if (x < 1 / d1) {
+			v = n1 * x * x;
+		} else if (x < 2 / d1) {
+			v = n1 * (x -= 1.5 / d1) * x + 0.75;
+		} else if (x < 2.5 / d1) {
+			v = n1 * (x -= 2.25 / d1) * x + 0.9375;
+		} else {
+			v = n1 * (x -= 2.625 / d1) * x + 0.984375;
+		}
+		return b + c * v;
+	}
 }

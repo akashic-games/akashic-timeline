@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 3.1.0
+* Easing#easeInOutBack(), easeOutBounce() を追加
+
 ## 3.0.0
 * akashic-engine@3.0.0 に追従
 
