@@ -8,8 +8,8 @@ import { Game } from "./helpers/mock";
 
 describe("test Tween", () => {
 	it("constructor", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		let tw = new Tween(target);
 		expect(tw._target).toBe(target);
 		expect(tw._stepIndex).toBe(0);
 		expect(tw._loop).toBe(false);
@@ -24,14 +24,14 @@ describe("test Tween", () => {
 	});
 
 	it("constructor - with TweenOption", () => {
-		var target = {x: 100, y: 200};
-		var tweenOption = {
-			modified: () => {},
+		const target = {x: 100, y: 200};
+		const tweenOption = {
+			modified: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 			destroyed: () => {
 				return false;
 			}
 		};
-		var tw = new Tween(target, tweenOption);
+		const tw = new Tween(target, tweenOption);
 		expect(tw._target).toBe(target);
 		expect(tw._stepIndex).toBe(0);
 		expect(tw._loop).toBe(false);
@@ -43,8 +43,8 @@ describe("test Tween", () => {
 	});
 
 	it("to", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.to({x: 200, y: 300}, 1000);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: Easing.linear(100, 100, 100, 1000), y: Easing.linear(100, 200, 100, 1000)});
@@ -57,8 +57,8 @@ describe("test Tween", () => {
 	});
 
 	it("to - loop", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target, {loop: true});
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target, {loop: true});
 		tw.to({x: 200, y: 300}, 1000, Easing.easeInCirc).to({x: 0, y: 0}, 1000);
 		tw._fire(1000);
 		expect(tw._target).toEqual({x: 200, y: 300});
@@ -69,8 +69,8 @@ describe("test Tween", () => {
 	});
 
 	it("to - paused", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target, {loop: true});
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target, {loop: true});
 		tw.to({x: 200, y: 300}, 1000, Easing.easeInExpo).to({x: 0, y: 0}, 1000, Easing.easeInExpo);
 		tw._fire(200);
 		expect(tw._target).toEqual({x: Easing.easeInExpo(200, 0, 200, 1000), y: Easing.easeInExpo(200, 0, 300, 1000)});
@@ -80,12 +80,12 @@ describe("test Tween", () => {
 	});
 
 	it("to - modifiedHandler", () => {
-		var target = {x: 0, y: 0};
-		var count = 0;
-		var m = (): void => {
+		const target = {x: 0, y: 0};
+		let count = 0;
+		const m = (): void => {
 			count++;
 		};
-		var tw = new Tween(target, {modified: m});
+		const tw = new Tween(target, {modified: m});
 		tw.to({x: 200, y: 300}, 1000, Easing.easeInOutCirc);
 		tw._fire(200);
 		expect(count).toBe(1);
@@ -102,8 +102,8 @@ describe("test Tween", () => {
 	});
 
 	it("to - operate undefined target", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target);
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target);
 		tw.to({x: 200, y: 300, angle: 100}, 1000, Easing.easeInOutExpo);
 		tw._fire(500);
 		expect(tw._target).toEqual({x: Easing.easeInOutExpo(500, 0, 200, 1000), y: Easing.easeInOutExpo(500, 0, 300, 1000)});
@@ -112,8 +112,8 @@ describe("test Tween", () => {
 	});
 
 	it("by", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.by({x: 200, y: 300}, 100, Easing.easeInOutQuad).by({x: -300, y: -500}, 100, Easing.easeInOutQubic);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 300, y: 500});
@@ -122,8 +122,8 @@ describe("test Tween", () => {
 	});
 
 	it("by - loop", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target, {loop: true});
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target, {loop: true});
 		tw.by({x: 200, y: 300}, 1000).by({x: -200, y: -300}, 1000, Easing.easeInOutQuint);
 		tw._fire(1000);
 		expect(tw._target).toEqual({x: 200, y: 300});
@@ -134,8 +134,8 @@ describe("test Tween", () => {
 	});
 
 	it("by - paused", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target, {loop: true});
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target, {loop: true});
 		tw.by({x: 200, y: 300}, 1000, Easing.easeInOutSine).by({x: -200, y: -300}, 1000, Easing.easeInQuad);
 		tw._fire(200);
 		expect(tw._target).toEqual({x: Easing.easeInOutSine(200, 0, 200, 1000), y: Easing.easeInOutSine(200, 0, 300, 1000)});
@@ -145,8 +145,8 @@ describe("test Tween", () => {
 	});
 
 	it("by - set multiple", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.by({x: 2, y: 2}, 100, Easing.easeOutSine, true).by({x: 0, y: 0}, 100, Easing.easeOutSine, true);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 200, y: 400});
@@ -155,12 +155,12 @@ describe("test Tween", () => {
 	});
 
 	it("by - modifiedHandler", () => {
-		var target = {x: 0, y: 0};
-		var count = 0;
-		var m = (): void => {
+		const target = {x: 0, y: 0};
+		let count = 0;
+		const m = (): void => {
 			count++;
 		};
-		var tw = new Tween(target, {modified: m});
+		const tw = new Tween(target, {modified: m});
 		tw.by({x: 200, y: 300}, 1000, Easing.easeInQuart);
 		tw._fire(200);
 		expect(count).toBe(1);
@@ -177,8 +177,8 @@ describe("test Tween", () => {
 	});
 
 	it("con", () => {
-		var target = {x: 100, y: 200, angle: 0};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200, angle: 0};
+		const tw = new Tween(target);
 		tw
 			.by({x: 200, y: 200}, 200, Easing.easeInQubic)
 			.con()
@@ -192,8 +192,8 @@ describe("test Tween", () => {
 	});
 
 	it("wait", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw
 			.to({x: 200, y: 300}, 100, Easing.easeInSine)
 			.wait(1000)
@@ -208,10 +208,10 @@ describe("test Tween", () => {
 	});
 
 	it("call", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
-		var count = {x: 0, y: 0};
-		var call = (): void => {
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
+		let count = {x: 0, y: 0};
+		const call = (): void => {
 			count.x = target.x;
 			count.y = target.y;
 		};
@@ -225,8 +225,8 @@ describe("test Tween", () => {
 	});
 
 	it("pause", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		expect(tw.paused).toBe(false);
 		tw.to({x: 200, y: 300}, 100, Easing.easeOutQuart).pause();
 		expect(tw.paused).toBe(false);
@@ -238,10 +238,10 @@ describe("test Tween", () => {
 	});
 
 	it("cue", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
-		var result: number;
-		var cue: {[key: string]: () => void} = {
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
+		let result: number;
+		const cue: {[key: string]: () => void} = {
 			"0": () => {
 				result = 0;
 			},
@@ -262,10 +262,10 @@ describe("test Tween", () => {
 	});
 
 	it("cue - random order", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
-		var result: number;
-		var cue: {[key: string]: () => void} = {
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
+		let result: number;
+		const cue: {[key: string]: () => void} = {
 			"1000": () => {
 				result = 1000;
 			},
@@ -286,10 +286,10 @@ describe("test Tween", () => {
 	});
 
 	it("every", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
-		var elapsed = 0;
-		var progress = 0;
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
+		let elapsed = 0;
+		let progress = 0;
 		tw.every((e, p) => {
 			elapsed = e;
 			progress = p;
@@ -306,10 +306,10 @@ describe("test Tween", () => {
 	});
 
 	it("every - elapsed > duration", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
-		var elapsed = 0;
-		var progress = 0;
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
+		let elapsed = 0;
+		let progress = 0;
 		tw.every((e, p) => {
 			elapsed = e;
 			progress = p;
@@ -326,8 +326,8 @@ describe("test Tween", () => {
 	});
 
 	it("fadeIn", () => {
-		var target = {x: 100, y: 200, opacity: 0};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200, opacity: 0};
+		const tw = new Tween(target);
 		expect(tw._target.opacity).toBe(0);
 		tw.fadeIn(1000);
 		tw._fire(500);
@@ -337,8 +337,8 @@ describe("test Tween", () => {
 	});
 
 	it("fadeOut", () => {
-		var target = {x: 100, y: 200, opacity: 1};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200, opacity: 1};
+		const tw = new Tween(target);
 		expect(tw._target.opacity).toBe(1);
 		tw.fadeOut(1000);
 		tw._fire(500);
@@ -348,8 +348,8 @@ describe("test Tween", () => {
 	});
 
 	it("moveTo", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.moveTo(200, 300, 1000);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 110, y: 210});
@@ -360,8 +360,8 @@ describe("test Tween", () => {
 	});
 
 	it("moveBy", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.moveBy(200, 300, 1000);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 120, y: 230});
@@ -372,8 +372,8 @@ describe("test Tween", () => {
 	});
 
 	it("moveX", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.moveX(200, 1000);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 110, y: 200});
@@ -384,8 +384,8 @@ describe("test Tween", () => {
 	});
 
 	it("moveY", () => {
-		var target = {x: 100, y: 200};
-		var tw = new Tween(target);
+		const target = {x: 100, y: 200};
+		const tw = new Tween(target);
 		tw.moveY(300, 1000);
 		tw._fire(100);
 		expect(tw._target).toEqual({x: 100, y: 210});
@@ -396,8 +396,8 @@ describe("test Tween", () => {
 	});
 
 	it("rotateTo", () => {
-		var target = {angle: 50};
-		var tw = new Tween(target);
+		const target = {angle: 50};
+		const tw = new Tween(target);
 		expect(tw._target).toEqual({angle: 50});
 		tw.rotateTo(90, 1000);
 		tw._fire(500);
@@ -407,8 +407,8 @@ describe("test Tween", () => {
 	});
 
 	it("rotateBy", () => {
-		var target = {angle: 50};
-		var tw = new Tween(target);
+		const target = {angle: 50};
+		const tw = new Tween(target);
 		expect(tw._target).toEqual({angle: 50});
 		tw.rotateBy(90, 1000);
 		tw._fire(500);
@@ -418,8 +418,8 @@ describe("test Tween", () => {
 	});
 
 	it("scaleTo", () => {
-		var target = {scaleX: 1, scaleY: 1};
-		var tw = new Tween(target);
+		const target = {scaleX: 1, scaleY: 1};
+		const tw = new Tween(target);
 		expect(tw._target).toEqual({scaleX: 1, scaleY: 1});
 		tw.scaleTo(2, 2, 1000);
 		tw._fire(500);
@@ -429,8 +429,8 @@ describe("test Tween", () => {
 	});
 
 	it("scaleBy", () => {
-		var target = {scaleX: 2, scaleY: 2};
-		var tw = new Tween(target);
+		const target = {scaleX: 2, scaleY: 2};
+		const tw = new Tween(target);
 		expect(tw._target).toEqual({scaleX: 2, scaleY: 2});
 		tw.scaleBy(2, 2, 1000);
 		tw._fire(500);
@@ -440,8 +440,8 @@ describe("test Tween", () => {
 	});
 
 	it("isFinished", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target);
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target);
 		// インスタンス生成直後は終了していない
 		expect(tw.isFinished()).toBe(false);
 		tw._loop = false;
@@ -461,12 +461,12 @@ describe("test Tween", () => {
 	});
 
 	it("isFinished - destroyedHandler", () => {
-		var target = {x: 0, y: 0};
-		var dres = false;
-		var d = (): boolean => {
+		const target = {x: 0, y: 0};
+		let dres = false;
+		const d = (): boolean => {
 			return dres;
 		};
-		var tw = new Tween(target, {destroyed: d});
+		const tw = new Tween(target, {destroyed: d});
 		tw._loop = true;
 		expect(tw.isFinished()).toBe(false);
 		dres = true;
@@ -474,19 +474,19 @@ describe("test Tween", () => {
 	});
 
 	it("push - no pararel", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target);
-		var action1 = {
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target);
+		const action1 = {
 			input: target,
 			duration: 1000,
 			easing: Easing.linear
 		};
-		var action2 = {
+		const action2 = {
 			input: target,
 			duration: 100,
 			easing: Easing.linear
 		};
-		var anyTw = <any>tw;
+		const anyTw = <any>tw;
 		anyTw._push(action1);
 		anyTw._push(action2);
 		expect(anyTw._lastStep[0]).toBe(action2);
@@ -495,19 +495,19 @@ describe("test Tween", () => {
 	});
 
 	it("push - pararel", () => {
-		var target = {x: 0, y: 0};
-		var tw = new Tween(target);
-		var action1 = {
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target);
+		const action1 = {
 			input: target,
 			duration: 1000,
 			easing: Easing.linear
 		};
-		var action2 = {
+		const action2 = {
 			input: target,
 			duration: 100,
 			easing: Easing.linear
 		};
-		var anyTw = <any>tw;
+		const anyTw = <any>tw;
 		anyTw._push(action1);
 		anyTw._pararel = true;
 		anyTw._push(action2);
@@ -756,8 +756,6 @@ describe("test Tween serializeState", () => {
 		scene = new g.Scene({ game: game });
 	});
 
-	afterEach(() => {
-	});
 
 	it("serializeState", () => {
 		const tl = new Timeline(scene);

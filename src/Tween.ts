@@ -87,7 +87,7 @@ export class Tween {
 	 * @param easing Easing関数（指定しない場合は`Easing.linear`）
 	 */
 	to(props: any, duration: number, easing: EasingType = Easing.linear): this {
-		var action = {
+		const action = {
 			input: props,
 			duration: duration,
 			easing: easing,
@@ -107,8 +107,8 @@ export class Tween {
 	 * @param multiply `true`を指定すると`props`の値をアクション開始時の値に掛け合わせた値が終了値となる（指定しない場合は`false`）
 	 */
 	by(props: any, duration: number, easing: EasingType = Easing.linear, multiply: boolean = false): this {
-		var type = multiply ? ActionType.TweenByMult : ActionType.TweenBy;
-		var action = {
+		const type = multiply ? ActionType.TweenByMult : ActionType.TweenBy;
+		const action = {
 			input: props,
 			duration: duration,
 			easing: easing,
@@ -133,7 +133,7 @@ export class Tween {
 	 * @param duration 停止する時間（ミリ秒）
 	 */
 	wait(duration: number): this {
-		var action = {
+		const action = {
 			duration: duration,
 			type: ActionType.Wait,
 			initialized: false
@@ -147,7 +147,7 @@ export class Tween {
 	 * @param func 実行する関数
 	 */
 	call(func: () => void): this {
-		var action = {
+		const action = {
 			func: func,
 			type: ActionType.Call,
 			duration: 0,
@@ -172,15 +172,15 @@ export class Tween {
 	 * @param actions 待機時間をキーとして実行したい関数を値としたオブジェクト
 	 */
 	cue(funcs: {[key: string]: () => void}): this {
-		var keys = Object.keys(funcs);
+		const keys = Object.keys(funcs);
 		keys.sort((a: string, b: string) => {
 			return Number(a) > Number(b) ? 1 : -1;
 		});
-		var q: {time: number; func: () => void}[] = [];
-		for (var i = 0; i < keys.length; ++i) {
+		const q: {time: number; func: () => void}[] = [];
+		for (let i = 0; i < keys.length; ++i) {
 			q.push({time: Number(keys[i]), func: funcs[keys[i]]});
 		}
-		var action = {
+		const action = {
 			type: ActionType.Cue,
 			duration: Number(keys[keys.length - 1]),
 			cue: q,
@@ -197,7 +197,7 @@ export class Tween {
 	 * @param easing Easing関数（指定しない場合は`Easing.linear`）
 	 */
 	every(func: (e: number, p: number) => void, duration: number, easing: EasingType = Easing.linear): this {
-		var action = {
+		const action = {
 			func: func,
 			type: ActionType.Every,
 			easing: easing,
@@ -376,7 +376,7 @@ export class Tween {
 	 * `_target`が破棄された場合又は、全アクションの実行が終了した場合に`true`を返す。
 	 */
 	isFinished(): boolean {
-		var ret = false;
+		let ret = false;
 		if (this._destroyedHandler) {
 			ret = this._destroyedHandler.call(this._target);
 		}
@@ -401,10 +401,10 @@ export class Tween {
 				return;
 			}
 		}
-		var actions = this._steps[this._stepIndex];
-		var remained = false;
-		for (var i = 0; i < actions.length; ++i) {
-			var action = actions[i];
+		const actions = this._steps[this._stepIndex];
+		let remained = false;
+		for (let i = 0; i < actions.length; ++i) {
+			const action = actions[i];
 			if (!action.initialized) {
 				this._initAction(action);
 			}
@@ -417,7 +417,7 @@ export class Tween {
 					action.func.call(this._target);
 					break;
 				case ActionType.Every:
-					var progress = action.easing(action.elapsed, 0, 1, action.duration);
+					let progress = action.easing(action.elapsed, 0, 1, action.duration);
 					if (progress > 1) {
 						progress = 1;
 					}
@@ -426,9 +426,9 @@ export class Tween {
 				case ActionType.TweenTo:
 				case ActionType.TweenBy:
 				case ActionType.TweenByMult:
-					var keys = Object.keys(action.goal);
-					for (var j = 0; j < keys.length; ++j) {
-						var key = keys[j];
+					const keys = Object.keys(action.goal);
+					for (let j = 0; j < keys.length; ++j) {
+						let key = keys[j];
 						// アクションにより undefined が指定されるケースと初期値を区別するため Object.prototype.hasOwnProperty() を利用
 						// (number以外が指定されるケースは存在しないが念の為)
 						if (!this._initialProp.hasOwnProperty(key)) {
@@ -447,7 +447,7 @@ export class Tween {
 					}
 					break;
 				case ActionType.Cue:
-					var cueAction = action.cue[action.cueIndex];
+					const cueAction = action.cue[action.cueIndex];
 					if (cueAction !== undefined && action.elapsed >= cueAction.time) {
 						cueAction.func.call(this._target);
 						++action.cueIndex;
@@ -464,7 +464,7 @@ export class Tween {
 			}
 		}
 		if (!remained) {
-			for (var k = 0; k < actions.length; ++k) {
+			for (let k = 0; k < actions.length; ++k) {
 				actions[k].initialized = false;
 			}
 			++this._stepIndex;
@@ -475,14 +475,14 @@ export class Tween {
 	 * Tweenの実行状態をシリアライズして返す。
 	 */
 	serializeState(): TweenStateSerialization {
-		var tData: TweenStateSerialization = {
+		const tData: TweenStateSerialization = {
 			_stepIndex: this._stepIndex,
 			_initialProp: this._initialProp,
 			_steps: []
 		};
-		for (var i = 0; i < this._steps.length; ++i) {
+		for (let i = 0; i < this._steps.length; ++i) {
 			tData._steps[i] = [];
-			for (var j = 0; j < this._steps[i].length; ++j) {
+			for (let j = 0; j < this._steps[i].length; ++j) {
 				tData._steps[i][j] = {
 					input: this._steps[i][j].input,
 					start: this._steps[i][j].start,
@@ -506,8 +506,8 @@ export class Tween {
 	deserializeState(serializedState: TweenStateSerialization): void {
 		this._stepIndex = serializedState._stepIndex;
 		this._initialProp = serializedState._initialProp;
-		for (var i = 0; i < serializedState._steps.length; ++i) {
-			for (var j = 0; j < serializedState._steps[i].length; ++j) {
+		for (let i = 0; i < serializedState._steps.length; ++i) {
+			for (let j = 0; j < serializedState._steps[i].length; ++j) {
 				if (!serializedState._steps[i][j] || !this._steps[i][j]) continue;
 				this._steps[i][j].input = serializedState._steps[i][j].input;
 				this._steps[i][j].start = serializedState._steps[i][j].start;
@@ -530,7 +530,7 @@ export class Tween {
 		if (this._pararel) {
 			this._lastStep.push(action);
 		} else {
-			var index = this._steps.push([action]) - 1;
+			const index = this._steps.push([action]) - 1;
 			this._lastStep = this._steps[index];
 		}
 		this._pararel = false;
@@ -548,9 +548,9 @@ export class Tween {
 			&& action.type !== ActionType.TweenByMult) {
 			return;
 		}
-		var keys = Object.keys(action.input);
-		for (var i = 0; i < keys.length; ++i) {
-			var key = keys[i];
+		const keys = Object.keys(action.input);
+		for (let i = 0; i < keys.length; ++i) {
+			const key = keys[i];
 			if (this._target[key] !== undefined) {
 				action.start[key] = this._target[key];
 				if (action.type === ActionType.TweenTo) {
