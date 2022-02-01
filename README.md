@@ -32,7 +32,7 @@ var timeline = require("@akashic-extension/akashic-timeline");
 で利用してください。
 
 使い方は [akashic-timelineの利用方法](https://github.com/akashic-games/akashic-timeline/blob/master/getstarted.md) を参照してください。
-詳細なリファレンスは [APIリファレンス](https://akashic-games.github.io/reference/akashic-timeline/index.html)を参照してください。
+詳細なリファレンスは [APIリファレンス](https://akashic-games.github.io/akashic-timeline/api/index.html)を参照してください。
 Akashic Engineの詳細な利用方法については、 [公式ページ](https://akashic-games.github.io/) を参照してください。
 
 ## サンプル
