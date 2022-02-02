@@ -33,7 +33,7 @@ export class Timeline {
 	 * @param option Tweenの生成オプション。省略された場合、 {modified: target.modified, destroyed: target.destroyed} が与えられた時と同様の処理を行う。
 	 */
 	create(target: any, option?: TweenOption): Tween {
-		var t = new Tween(target, option);
+		const t = new Tween(target, option);
 		this._tweens.push(t);
 		return t;
 	}
@@ -43,7 +43,7 @@ export class Timeline {
 	 * @param tween 削除するTween。
 	 */
 	remove(tween: Tween): void {
-		var index = this._tweens.indexOf(tween);
+		const index = this._tweens.indexOf(tween);
 		if (index < 0) {
 			return;
 		}
@@ -110,9 +110,9 @@ export class Timeline {
 		if (this._tweens.length === 0 || this.paused) {
 			return;
 		}
-		var tmp: Tween[] = [];
-		for (var i = 0; i < this._tweens.length; ++i) {
-			var tween = this._tweens[i];
+		const tmp: Tween[] = [];
+		for (let i = 0; i < this._tweens.length; ++i) {
+			const tween = this._tweens[i];
 			if (!tween.isFinished()) {
 				tween._fire(1000 / this._fps);
 				tmp.push(tween);

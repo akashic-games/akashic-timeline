@@ -3,7 +3,7 @@ coverage
 lib
 tmp
 spec/build
-doc
+public
 
 .DS_Store*
 *.log

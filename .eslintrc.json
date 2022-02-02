@@ -1,7 +1,7 @@
 {
     "extends": "@akashic/eslint-config",
     "parserOptions": {
-        "project": "tsconfig.json",
+        "project": "tsconfig.eslint.json",
         "sourceType": "module"
     }
 }
