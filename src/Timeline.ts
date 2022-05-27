@@ -110,11 +110,18 @@ export class Timeline {
 		if (this._tweens.length === 0 || this.paused) {
 			return;
 		}
-		const tmp: Tween[] = [];
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
 			if (!tween.isFinished()) {
 				tween._fire(1000 / this._fps);
+			}
+		}
+
+		// tween._fire() で発火した関数で _tweens が更新された場合、単一の for ループでは tmp に加えることができないため、ループを分離
+		const tmp: Tween[] = [];
+		for (let i = 0; i < this._tweens.length; ++i) {
+			const tween = this._tweens[i];
+			if (!tween.isFinished()) {
 				tmp.push(tween);
 			}
 		}
