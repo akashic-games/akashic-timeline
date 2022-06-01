@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "ES5",
     "declaration": true,
-    "noLib": false,
     "lib": ["es5"],
     "noImplicitAny": true,
     "outDir": "lib",
     "module": "commonjs",
+    "types": ["node"],
     "allowUmdGlobalAccess": true
   },
   "files": [
