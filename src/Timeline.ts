@@ -13,6 +13,7 @@ export class Timeline {
 
 	_scene: g.Scene;
 	_tweens: Tween[];
+	_tweensCreateQue: Tween[];
 	_fps: number;
 
 	/**
@@ -22,6 +23,7 @@ export class Timeline {
 	constructor(scene: g.Scene) {
 		this._scene = scene;
 		this._tweens = [];
+		this._tweensCreateQue = [];
 		this._fps = this._scene.game.fps;
 		this.paused = false;
 		scene.update.add(this._handler, this);
@@ -34,7 +36,7 @@ export class Timeline {
 	 */
 	create(target: any, option?: TweenOption): Tween {
 		const t = new Tween(target, option);
-		this._tweens.push(t);
+		this._tweensCreateQue.push(t);
 		return t;
 	}
 
@@ -47,7 +49,7 @@ export class Timeline {
 		if (index < 0) {
 			return;
 		}
-		this._tweens.splice(index, 1);
+		this._tweens[index].cancel(false);
 	}
 
 	/**
@@ -60,7 +62,6 @@ export class Timeline {
 				tween.complete();
 			}
 		}
-		this.clear();
 	}
 
 	/**
@@ -68,24 +69,19 @@ export class Timeline {
 	 * @param revert ターゲットのプロパティをアクション開始前に戻すかどうか (指定しない場合は `false`)
 	 */
 	cancelAll(revert: boolean = false): void {
-		if (!revert) {
-			this.clear();
-			return;
-		}
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
 			if (!tween.isFinished()) {
-				tween.cancel(true);
+				tween.cancel(revert);
 			}
 		}
-		this.clear();
 	}
 
 	/**
 	 * Timelineに紐付いた全Tweenの紐付けを解除する。
 	 */
 	clear(): void {
-		this._tweens.length = 0;
+		this.cancelAll(false);
 	}
 
 	/**
@@ -110,21 +106,16 @@ export class Timeline {
 		if (this._tweens.length === 0 || this.paused) {
 			return;
 		}
-		for (let i = 0; i < this._tweens.length; ++i) {
-			const tween = this._tweens[i];
-			if (!tween.isFinished()) {
-				tween._fire(1000 / this._fps);
-			}
-		}
-
-		// tween._fire() で発火した関数で _tweens が更新された場合、単一の for ループでは tmp に加えることができないため、ループを分離
 		const tmp: Tween[] = [];
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
 			if (!tween.isFinished()) {
+				tween._fire(1000 / this._fps);
 				tmp.push(tween);
+
 			}
 		}
-		this._tweens = tmp;
+		this._tweens = tmp.concat(this._tweensCreateQue);
+		this._tweensCreateQue = [];
 	}
 }
