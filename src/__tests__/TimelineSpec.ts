@@ -40,8 +40,11 @@ describe("test Timeline", () => {
 		expect(tl._tweens.length).toBe(0);
 		tl._handler();
 		tl.remove(tw1);
-		expect(tl._tweens.length).toBe(2); // tw1 はアクションが0個なので remove されない
 		expect(tw1.isFinished()).toBe(false);
+		expect(tl._tweens.length).toBe(2);
+		expect(tw1._stale).toBe(true);
+		expect(tw1.shouldRemove()).toBe(true);
+
 		tw1.to({x: 200, y: 300}, 100);
 		tl.remove(tw1);
 		expect(tw1.isFinished()).toBe(true);
@@ -50,11 +53,16 @@ describe("test Timeline", () => {
 		tl._handler();
 		expect(tw1.isFinished()).toBe(true);
 		expect(tl._tweens.length).toBe(1);
+
 		tl.remove(null);
 		expect(tl._tweens.length).toBe(1);
+
 		tl.remove(tw2);
 		expect(tw2.isFinished()).toBe(false);
 		expect(tl._tweens.length).toBe(1);
+		expect(tw2._stale).toBe(true);
+		expect(tw2.shouldRemove()).toBe(true);
+
 		tw2.to({x: 200, y: 300}, 100);
 		tl.remove(tw2);
 		expect(tw2.isFinished()).toBe(true);
@@ -201,6 +209,26 @@ describe("test Timeline", () => {
 		tw2d = true;
 		scene.update.fire();
 		expect(tl._tweens.length).toBe(0);
+	});
+
+	it("_handler - auto remove empty tweens", () => {
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
+		tw1.to({x: 200, y: 300}, 100);
+		expect(tl._tweensCreateQue.length).toBe(1);
+		expect(tl._tweens.length).toBe(0);
+		const tw2 = tl.create({x: 300, y: 400});
+		expect(tl._tweensCreateQue.length).toBe(2);
+		expect(tl._tweens.length).toBe(0);
+		scene.update.fire();
+		expect(tl._tweensCreateQue.length).toBe(0);
+		expect(tl._tweens.length).toBe(2);
+
+		tl.remove(tw1);
+		tl.remove(tw2);
+		scene.update.fire();
+		expect(tl._tweens.length).toBe(0);
+		scene.update.fire();
 	});
 
 });

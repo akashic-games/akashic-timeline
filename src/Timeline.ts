@@ -120,7 +120,7 @@ export class Timeline {
 		const tmp: Tween[] = [];
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
-			if (!tween.isFinished()) {
+			if (!tween.shouldRemove()) {
 				tween._fire(1000 / this._fps);
 				tmp.push(tween);
 			}

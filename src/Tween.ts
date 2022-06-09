@@ -33,6 +33,7 @@ export class Tween {
 	_target: any;
 	_stepIndex: number;
 	_loop: boolean;
+	_stale: boolean;
 	_modifiedHandler: () => void;
 	_destroyedHandler: () => boolean;
 
@@ -60,6 +61,7 @@ export class Tween {
 		this._target = target;
 		this._stepIndex = 0;
 		this._loop = !!option && !!option.loop;
+		this._stale = false;
 		this._modifiedHandler = undefined;
 		if (option && option.modified) {
 			this._modifiedHandler = option.modified;
@@ -366,6 +368,7 @@ export class Tween {
 		this._lastStep = undefined;
 		this._pararel = false;
 		this.paused = false;
+		this._stale = true;
 		if (this._modifiedHandler) {
 			this._modifiedHandler.call(this._target);
 		}
@@ -384,6 +387,10 @@ export class Tween {
 			ret = this._stepIndex !== 0 && this._stepIndex >= this._steps.length && !this._loop;
 		}
 		return ret;
+	}
+
+	shouldRemove(): boolean {
+		return this._stale || this.isFinished();
 	}
 
 	/**
