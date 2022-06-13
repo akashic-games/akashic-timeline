@@ -63,6 +63,12 @@ export class Timeline {
 				tween.complete();
 			}
 		}
+		for (let i = 0; i < this._tweensCreateQue.length; ++i) {
+			const tween = this._tweensCreateQue[i];
+			if (!tween.isFinished()) {
+				tween.complete();
+			}
+		}
 	}
 
 	/**
