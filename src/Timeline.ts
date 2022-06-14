@@ -26,7 +26,7 @@ export class Timeline {
 		this._tweensCreateQue = [];
 		this._fps = this._scene.game.fps;
 		this.paused = false;
-		scene.update.add(this._handler, this);
+		scene.onUpdate.add(this._handler, this);
 	}
 
 	/**
@@ -103,7 +103,7 @@ export class Timeline {
 	destroy(): void {
 		this.clear();
 		if (!this._scene.destroyed()) {
-			this._scene.update.remove(this._handler, this);
+			this._scene.onUpdate.remove(this._handler, this);
 		}
 		this._scene = undefined;
 	}
