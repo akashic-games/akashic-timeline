@@ -116,12 +116,12 @@ export class Timeline {
 	}
 
 	_handler(): void {
-		this._tweens = this._tweens.concat(this._tweensCreateQue);
-		this._tweensCreateQue = [];
-
-		if (this._tweens.length === 0 || this.paused) {
+		if (this.paused || this._tweens.length + this._tweensCreateQue.length === 0) {
 			return;
 		}
+
+		this._tweens = this._tweens.concat(this._tweensCreateQue);
+		this._tweensCreateQue = [];
 
 		const tmp: Tween[] = [];
 		for (let i = 0; i < this._tweens.length; ++i) {

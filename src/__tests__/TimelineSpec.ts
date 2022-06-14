@@ -231,4 +231,31 @@ describe("test Timeline", () => {
 		scene.update.fire();
 	});
 
+	it("_handler - Timeline#create in _handler", () => {
+		let isSucceeded = false;
+		const tl = new Timeline(scene);
+		function addAction(): void {
+			const tw2 = tl.create({x: 100, y: 200});
+			tw2.to({x: 200, y: 300}, 0);
+			tw2.call(() => {
+				isSucceeded = true;
+			});
+		}
+		const tw1 = tl.create({x: 100, y: 200});
+		tw1.to({x: 200, y: 300}, 0);
+		tw1.call(() => {
+			addAction();
+		});
+
+		expect(tl._tweensCreateQue.length).toBe(1);
+		expect(tl._tweens.length).toBe(0);
+		tl._handler(); // consume tw1.to
+		expect(tl._tweensCreateQue.length).toBe(0);
+		expect(tl._tweens.length).toBe(1);
+		tl._handler(); // consume tw1.call
+		tl._handler(); // consume tw2.to
+		tl._handler(); // consume tw2.call
+		expect(isSucceeded).toBe(true);
+
+	});
 });
