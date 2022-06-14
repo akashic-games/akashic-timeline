@@ -256,6 +256,5 @@ describe("test Timeline", () => {
 		tl._handler(); // consume tw2.to
 		tl._handler(); // consume tw2.call
 		expect(isSucceeded).toBe(true);
-
 	});
 });
