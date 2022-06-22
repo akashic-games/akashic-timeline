@@ -22,33 +22,67 @@ describe("test Timeline", () => {
 	it("create", () => {
 		const tl = new Timeline(scene);
 		tl.create({x: 100, y: 200});
-		expect(tl._tweens.length).toBe(1);
+		expect(tl._tweensCreateQue.length).toBe(1);
+		expect(tl._tweens.length).toBe(0);
 		tl.create({x: 300, y: 400});
+		expect(tl._tweensCreateQue.length).toBe(2);
+		expect(tl._tweens.length).toBe(0);
+		tl._handler();
+		expect(tl._tweensCreateQue.length).toBe(0);
 		expect(tl._tweens.length).toBe(2);
 	});
 
 	it("remove", () => {
 		const tl = new Timeline(scene);
 		const tw1 = tl.create({x: 100, y: 200});
-		expect(tl._tweens.length).toBe(1);
 		const tw2 = tl.create({x: 300, y: 400});
-		expect(tl._tweens.length).toBe(2);
+		expect(tl._tweensCreateQue.length).toBe(2);
+		expect(tl._tweens.length).toBe(0);
+		tl._handler();
 		tl.remove(tw1);
+		expect(tw1.isFinished()).toBe(false);
+		expect(tl._tweens.length).toBe(2);
+		expect(tw1._stale).toBe(true);
+		expect(tw1.shouldRemove()).toBe(true);
+
+		tw1.to({x: 200, y: 300}, 100);
+		tl.remove(tw1);
+		expect(tw1.isFinished()).toBe(true);
+		expect(tw1._stepIndex).toBe(1);
+		expect(tl._tweens.length).toBe(2);
+		tl._handler();
+		expect(tw1.isFinished()).toBe(true);
 		expect(tl._tweens.length).toBe(1);
+
 		tl.remove(null);
 		expect(tl._tweens.length).toBe(1);
+
 		tl.remove(tw2);
+		expect(tw2.isFinished()).toBe(false);
+		expect(tl._tweens.length).toBe(1);
+		expect(tw2._stale).toBe(true);
+		expect(tw2.shouldRemove()).toBe(true);
+
+		tw2.to({x: 200, y: 300}, 100);
+		tl.remove(tw2);
+		expect(tw2.isFinished()).toBe(true);
+		expect(tw2._stepIndex).toBe(1);
+		expect(tl._tweens.length).toBe(1);
+		tl._handler();
+		expect(tw2.isFinished()).toBe(true);
 		expect(tl._tweens.length).toBe(0);
 	});
 
 	it("clear", () => {
 		const tl = new Timeline(scene);
 		tl.create({x: 100, y: 200});
-		expect(tl._tweens.length).toBe(1);
+		expect(tl._tweensCreateQue.length).toBe(1);
 		tl.create({x: 300, y: 400});
-		expect(tl._tweens.length).toBe(2);
+		expect(tl._tweensCreateQue.length).toBe(2);
 		tl.clear();
-		expect(tl._tweens.length).toBe(0);
+		expect(tl._tweensCreateQue.length).toBe(2);
+		tl._handler();
+		expect(tl._tweensCreateQue.length).toBe(0);
 	});
 
 	it("cancelAll", () => {
@@ -96,9 +130,9 @@ describe("test Timeline", () => {
 	it("destroy", () => {
 		const tl = new Timeline(scene);
 		tl.create({x: 100, y: 200});
-		expect(tl._tweens.length).toBe(1);
+		expect(tl._tweensCreateQue.length).toBe(1);
 		tl.create({x: 300, y: 400});
-		expect(tl._tweens.length).toBe(2);
+		expect(tl._tweensCreateQue.length).toBe(2);
 		expect(scene.update.contains(tl._handler, tl)).toBe(true);
 		tl.destroy();
 		expect(tl._scene).toBeUndefined();
@@ -109,13 +143,16 @@ describe("test Timeline", () => {
 	it("destroy - scene already destroyed", () => {
 		const tl = new Timeline(scene);
 		tl.create({x: 100, y: 200});
-		expect(tl._tweens.length).toBe(1);
+		expect(tl._tweensCreateQue.length).toBe(1);
 		tl.create({x: 300, y: 400});
-		expect(tl._tweens.length).toBe(2);
+		expect(tl._tweensCreateQue.length).toBe(2);
 		scene.destroy();
 		tl.destroy();
 		expect(tl._scene).toBeUndefined();
+		expect(tl._tweensCreateQue.length).toBe(2);
 		expect(tl._tweens.length).toBe(0);
+		tl._handler();
+		expect(tl._tweensCreateQue.length).toBe(0);
 	});
 
 	it("destroyed", () => {
@@ -154,14 +191,17 @@ describe("test Timeline", () => {
 		tw1.isFinished = () => {
 			return tw1d;
 		};
-		expect(tl._tweens.length).toBe(1);
+		expect(tl._tweensCreateQue.length).toBe(1);
+		expect(tl._tweens.length).toBe(0);
 		const tw2 = tl.create({x: 300, y: 400});
 		let tw2d = false;
 		tw2.isFinished = () => {
 			return tw2d;
 		};
-		expect(tl._tweens.length).toBe(2);
+		expect(tl._tweensCreateQue.length).toBe(2);
+		expect(tl._tweens.length).toBe(0);
 		scene.update.fire();
+		expect(tl._tweensCreateQue.length).toBe(0);
 		expect(tl._tweens.length).toBe(2);
 		tw1d = true;
 		scene.update.fire();
@@ -171,4 +211,50 @@ describe("test Timeline", () => {
 		expect(tl._tweens.length).toBe(0);
 	});
 
+	it("_handler - auto remove empty tweens", () => {
+		const tl = new Timeline(scene);
+		const tw1 = tl.create({x: 100, y: 200});
+		tw1.to({x: 200, y: 300}, 100);
+		expect(tl._tweensCreateQue.length).toBe(1);
+		expect(tl._tweens.length).toBe(0);
+		const tw2 = tl.create({x: 300, y: 400});
+		expect(tl._tweensCreateQue.length).toBe(2);
+		expect(tl._tweens.length).toBe(0);
+		scene.update.fire();
+		expect(tl._tweensCreateQue.length).toBe(0);
+		expect(tl._tweens.length).toBe(2);
+
+		tl.remove(tw1);
+		tl.remove(tw2);
+		scene.update.fire();
+		expect(tl._tweens.length).toBe(0);
+		scene.update.fire();
+	});
+
+	it("_handler - Timeline#create in _handler", () => {
+		let isSucceeded = false;
+		const tl = new Timeline(scene);
+		function addAction(): void {
+			const tw2 = tl.create({x: 100, y: 200});
+			tw2.to({x: 200, y: 300}, 0);
+			tw2.call(() => {
+				isSucceeded = true;
+			});
+		}
+		const tw1 = tl.create({x: 100, y: 200});
+		tw1.to({x: 200, y: 300}, 0);
+		tw1.call(() => {
+			addAction();
+		});
+
+		expect(tl._tweensCreateQue.length).toBe(1);
+		expect(tl._tweens.length).toBe(0);
+		tl._handler(); // consume tw1.to
+		expect(tl._tweensCreateQue.length).toBe(0);
+		expect(tl._tweens.length).toBe(1);
+		tl._handler(); // consume tw1.call
+		tl._handler(); // consume tw2.to
+		tl._handler(); // consume tw2.call
+		expect(isSucceeded).toBe(true);
+	});
 });

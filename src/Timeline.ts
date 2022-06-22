@@ -13,6 +13,7 @@ export class Timeline {
 
 	_scene: g.Scene;
 	_tweens: Tween[];
+	_tweensCreateQue: Tween[];
 	_fps: number;
 
 	/**
@@ -22,9 +23,10 @@ export class Timeline {
 	constructor(scene: g.Scene) {
 		this._scene = scene;
 		this._tweens = [];
+		this._tweensCreateQue = [];
 		this._fps = this._scene.game.fps;
 		this.paused = false;
-		scene.update.add(this._handler, this);
+		scene.onUpdate.add(this._handler, this);
 	}
 
 	/**
@@ -34,7 +36,7 @@ export class Timeline {
 	 */
 	create(target: any, option?: TweenOption): Tween {
 		const t = new Tween(target, option);
-		this._tweens.push(t);
+		this._tweensCreateQue.push(t);
 		return t;
 	}
 
@@ -44,10 +46,11 @@ export class Timeline {
 	 */
 	remove(tween: Tween): void {
 		const index = this._tweens.indexOf(tween);
-		if (index < 0) {
+		const queIndex = this._tweensCreateQue.indexOf(tween);
+		if (index < 0 && queIndex < 0) {
 			return;
 		}
-		this._tweens.splice(index, 1);
+		tween.cancel(false);
 	}
 
 	/**
@@ -60,7 +63,12 @@ export class Timeline {
 				tween.complete();
 			}
 		}
-		this.clear();
+		for (let i = 0; i < this._tweensCreateQue.length; ++i) {
+			const tween = this._tweensCreateQue[i];
+			if (!tween.isFinished()) {
+				tween.complete();
+			}
+		}
 	}
 
 	/**
@@ -68,33 +76,34 @@ export class Timeline {
 	 * @param revert ターゲットのプロパティをアクション開始前に戻すかどうか (指定しない場合は `false`)
 	 */
 	cancelAll(revert: boolean = false): void {
-		if (!revert) {
-			this.clear();
-			return;
-		}
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
 			if (!tween.isFinished()) {
-				tween.cancel(true);
+				tween.cancel(revert);
 			}
 		}
-		this.clear();
+		for (let i = 0; i < this._tweensCreateQue.length; ++i) {
+			const tween = this._tweensCreateQue[i];
+			if (!tween.isFinished()) {
+				tween.cancel(revert);
+			}
+		}
 	}
 
 	/**
 	 * Timelineに紐付いた全Tweenの紐付けを解除する。
 	 */
 	clear(): void {
-		this._tweens.length = 0;
+		this.cancelAll(false);
 	}
 
 	/**
 	 * このTimelineを破棄する。
 	 */
 	destroy(): void {
-		this._tweens.length = 0;
+		this.clear();
 		if (!this._scene.destroyed()) {
-			this._scene.update.remove(this._handler, this);
+			this._scene.onUpdate.remove(this._handler, this);
 		}
 		this._scene = undefined;
 	}
@@ -107,13 +116,17 @@ export class Timeline {
 	}
 
 	_handler(): void {
-		if (this._tweens.length === 0 || this.paused) {
+		if (this.paused || this._tweens.length + this._tweensCreateQue.length === 0) {
 			return;
 		}
+
+		this._tweens = this._tweens.concat(this._tweensCreateQue);
+		this._tweensCreateQue = [];
+
 		const tmp: Tween[] = [];
 		for (let i = 0; i < this._tweens.length; ++i) {
 			const tween = this._tweens[i];
-			if (!tween.isFinished()) {
+			if (!tween.shouldRemove()) {
 				tween._fire(1000 / this._fps);
 				tmp.push(tween);
 			}

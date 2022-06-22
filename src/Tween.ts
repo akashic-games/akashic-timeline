@@ -33,6 +33,13 @@ export class Tween {
 	_target: any;
 	_stepIndex: number;
 	_loop: boolean;
+
+	/**
+	 * Tween の削除可否を表すフラグ。
+	 * isFinished() はアクションが 0 個の場合に真を返さないが、後方互換性のためにこの挙動は変更せず、
+	 * _stale を用いて削除判定を行う。
+	 */
+	_stale: boolean;
 	_modifiedHandler: () => void;
 	_destroyedHandler: () => boolean;
 
@@ -60,6 +67,7 @@ export class Tween {
 		this._target = target;
 		this._stepIndex = 0;
 		this._loop = !!option && !!option.loop;
+		this._stale = false;
 		this._modifiedHandler = undefined;
 		if (option && option.modified) {
 			this._modifiedHandler = option.modified;
@@ -366,6 +374,7 @@ export class Tween {
 		this._lastStep = undefined;
 		this._pararel = false;
 		this.paused = false;
+		this._stale = true;
 		if (this._modifiedHandler) {
 			this._modifiedHandler.call(this._target);
 		}
@@ -384,6 +393,14 @@ export class Tween {
 			ret = this._stepIndex !== 0 && this._stepIndex >= this._steps.length && !this._loop;
 		}
 		return ret;
+	}
+
+	/**
+	 * アニメーションが削除可能かどうかを返す。
+	 * 通常、ゲーム開発者がこのメソッドを呼び出す必要はない。
+	 */
+	shouldRemove(): boolean {
+		return this._stale || this.isFinished();
 	}
 
 	/**
