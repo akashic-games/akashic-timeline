@@ -434,11 +434,12 @@ export class Tween {
 					action.func.call(this._target);
 					break;
 				case ActionType.Every:
-					let progress = action.easing(action.elapsed, 0, 1, action.duration);
+					const elapsed = Math.min(action.elapsed, action.duration);
+					let progress = action.easing(elapsed, 0, 1, action.duration);
 					if (progress > 1) {
 						progress = 1;
 					}
-					action.func.call(this._target, action.elapsed, progress);
+					action.func.call(this._target, elapsed, progress);
 					break;
 				case ActionType.TweenTo:
 				case ActionType.TweenBy:

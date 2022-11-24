@@ -321,7 +321,7 @@ describe("test Tween", () => {
 		expect(elapsed).toBe(500);
 		expect(progress).toBe(0.5);
 		tw._fire(1000);
-		expect(elapsed).toBe(1500);
+		expect(elapsed).toBe(1000);
 		expect(progress).toBe(1);
 	});
 
