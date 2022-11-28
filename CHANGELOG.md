@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 3.2.1
+* easing 関数の `Every` で `elapsed > duration` となる不具合を修正
+
 ## 3.2.0
 * `Tween#call()` の処理中に `timeline.create()` を実行して Tween を生成した場合、 Tween が Timeline キューに正しく追加されない不具合を修正
 
