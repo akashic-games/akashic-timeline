@@ -40,7 +40,7 @@ module.exports = function() {
     const tween = t.create(rectBlue, { loop: true });
     let j;
     tween.call(() => { j = 0; });
-    for (var i = 0; i < easing.length; ++i) {
+    for (let i = 0; i < easing.length; ++i) {
       tween.wait(1000)
            .call(() => { ++j; })
            .to({ opacity: 1.0 }, 200, tl.Easing.easeOutQubic)
