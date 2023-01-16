@@ -1,15 +1,15 @@
-var game = g.game;
+const game = g.game;
 
 // game.json の globalScripts フィールドにファイル名を列挙しておく必要がある点に注意。
-var tl = require("@akashic-extension/akashic-timeline");
+const tl = require("@akashic-extension/akashic-timeline");
 
 module.exports = function() {
-  var scene = new g.Scene({ game: game });
-  scene.loaded.add(function() {
-    var t = new tl.Timeline(scene);
+  const scene = new g.Scene({ game: game });
+  scene.onLoad.add(() => {
+    const t = new tl.Timeline(scene);
 
     // シンプル往復
-    var rectGray = new g.FilledRect({ scene: scene, cssColor: "gray", width: 32, height: 32 });
+    const rectGray = new g.FilledRect({ scene: scene, cssColor: "gray", width: 32, height: 32 });
     scene.append(rectGray);
     rectGray.x = 10;
     rectGray.y = 10;
@@ -19,8 +19,8 @@ module.exports = function() {
      .to({ x: 10 }, 1000, tl.Easing.linear);
 
     // 回転しながら往復
-    var rectRed = new g.FilledRect({ scene: scene, cssColor: "red", width: 32, height: 32 });
-    var rectRedX = rectGray.x;
+    const rectRed = new g.FilledRect({ scene: scene, cssColor: "red", width: 32, height: 32 });
+    const rectRedX = rectGray.x;
     scene.append(rectRed);
     rectRed.x = rectRedX;
     rectRed.y = rectGray.y + rectGray.height + 10;
@@ -31,18 +31,18 @@ module.exports = function() {
      .to({ angle: 0 }, 0);
 
     // 各種イージング
-    var rectBlue = new g.FilledRect({ scene: scene, cssColor: "blue", width: 32, height: 32 });
-    var rectBlueX = rectRed.x;
+    const rectBlue = new g.FilledRect({ scene: scene, cssColor: "blue", width: 32, height: 32 });
+    const rectBlueX = rectRed.x;
     rectBlue.x = rectBlueX;
     rectBlue.y = rectRed.y + rectRed.height + 10;
     scene.append(rectBlue);
-    var easing = Object.keys(tl.Easing);
-    var tween = t.create(rectBlue, { loop: true });
-    var j;
-    tween.call(function() { j = 0; });
-    for (var i = 0; i < easing.length; ++i) {
+    const easing = Object.keys(tl.Easing);
+    const tween = t.create(rectBlue, { loop: true });
+    let j;
+    tween.call(() => { j = 0; });
+    for (let i = 0; i < easing.length; ++i) {
       tween.wait(1000)
-           .call(function() { ++j; })
+           .call(() => { ++j; })
            .to({ opacity: 1.0 }, 200, tl.Easing.easeOutQubic)
            .to({ x: game.width - rectBlue.width - 10 }, 1000, tl.Easing[easing[i]])
            .to({ opacity: 0 }, 200, tl.Easing.easeInQubic)
@@ -50,24 +50,24 @@ module.exports = function() {
     }
 
     // カスタム関数によるアニメーション
-    var rectFuchsia = new g.FilledRect({ scene: scene, cssColor: "fuchsia", width: 32, height: 32 });
-    var rectFuchsiaX = rectBlue.x;
-    var rectFuchsiaY = rectBlue.y + rectBlue.height + 10;
+    const rectFuchsia = new g.FilledRect({ scene: scene, cssColor: "fuchsia", width: 32, height: 32 });
+    const rectFuchsiaX = rectBlue.x;
+    const rectFuchsiaY = rectBlue.y + rectBlue.height + 10;
     scene.append(rectFuchsia);
     rectFuchsia.x = rectFuchsiaX;
     rectFuchsia.y = rectFuchsiaY;
     rectFuchsia.modified();
     t.create(rectFuchsia, { loop: true })
-     .every(function (_, p) {
+     .every((_, p) => {
        rectFuchsia.x = p * (game.width - rectGray.width - 10) + rectFuchsiaX;
        rectFuchsia.y = 15 * Math.sin(3 * p * 2 * Math.PI) + rectFuchsiaY;
      }, 1000, tl.Easing.easeInOutQubic)
      .to({ x: rectFuchsiaX }, 1000, tl.Easing.linear);
 
     // 並列実行によるアニメーション
-    var rectGreen = new g.FilledRect({ scene: scene, cssColor: "green", width: 32, height: 32 });
-    var rectGreenX = rectFuchsia.x;
-    var rectGreenY = rectFuchsia.y + rectFuchsia.height + 20;
+    const rectGreen = new g.FilledRect({ scene: scene, cssColor: "green", width: 32, height: 32 });
+    const rectGreenX = rectFuchsia.x;
+    const rectGreenY = rectFuchsia.y + rectFuchsia.height + 20;
     scene.append(rectGreen);
     rectGreen.x = rectGreenX;
     rectGreen.y = rectGreenY;
