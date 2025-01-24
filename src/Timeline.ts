@@ -1,5 +1,5 @@
 import { Tween } from "./Tween";
-import { TweenOption } from "./TweenOption";
+import type { TweenOption } from "./TweenOption";
 
 /**
  * タイムライン機能を提供するクラス。

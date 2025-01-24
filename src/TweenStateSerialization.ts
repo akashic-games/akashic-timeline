@@ -1,4 +1,4 @@
-import { ActionType } from "./ActionType";
+import type { ActionType } from "./ActionType";
 
 export interface TweenStateSerialization {
 	_stepIndex: number;
