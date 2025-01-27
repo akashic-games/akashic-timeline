@@ -210,7 +210,7 @@ describe("test Tween", () => {
 	it("call", () => {
 		const target = {x: 100, y: 200};
 		const tw = new Tween(target);
-		let count = {x: 0, y: 0};
+		const count = {x: 0, y: 0};
 		const call = (): void => {
 			count.x = target.x;
 			count.y = target.y;

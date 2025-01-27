@@ -1,8 +1,8 @@
 import { ActionType } from "./ActionType";
 import { Easing }  from "./Easing";
-import { EasingType } from "./EasingType";
-import { TweenOption } from "./TweenOption";
-import { TweenStateSerialization } from "./TweenStateSerialization";
+import type { EasingType } from "./EasingType";
+import type { TweenOption } from "./TweenOption";
+import type { TweenStateSerialization } from "./TweenStateSerialization";
 
 interface TweenAction {
 	input?: any;
@@ -446,7 +446,7 @@ export class Tween {
 				case ActionType.TweenByMult:
 					const keys = Object.keys(action.goal);
 					for (let j = 0; j < keys.length; ++j) {
-						let key = keys[j];
+						const key = keys[j];
 						// アクションにより undefined が指定されるケースと初期値を区別するため Object.prototype.hasOwnProperty() を利用
 						// (number以外が指定されるケースは存在しないが念の為)
 						if (!this._initialProp.hasOwnProperty(key)) {
