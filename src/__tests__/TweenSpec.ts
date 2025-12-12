@@ -473,7 +473,7 @@ describe("test Tween", () => {
 		expect(tw.isFinished()).toBe(true);
 	});
 
-	it("push - no pararel", () => {
+	it("push - no parallel", () => {
 		const target = {x: 0, y: 0};
 		const tw = new Tween(target);
 		const action1 = {
@@ -494,7 +494,7 @@ describe("test Tween", () => {
 		expect(anyTw._steps[1][0]).toBe(action2);
 	});
 
-	it("push - pararel", () => {
+	it("push - parallel", () => {
 		const target = {x: 0, y: 0};
 		const tw = new Tween(target);
 		const action1 = {
@@ -509,7 +509,7 @@ describe("test Tween", () => {
 		};
 		const anyTw = <any>tw;
 		anyTw._push(action1);
-		anyTw._pararel = true;
+		anyTw._parallel = true;
 		anyTw._push(action2);
 		expect(anyTw._lastStep[0]).toBe(action1);
 		expect(anyTw._lastStep[1]).toBe(action2);

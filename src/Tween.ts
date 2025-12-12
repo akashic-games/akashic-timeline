@@ -52,7 +52,7 @@ export class Tween {
 	/**
 	 * 次に追加するアクションが並列実行か否か。
 	 */
-	private _pararel: boolean;
+	private _parallel: boolean;
 	/**
 	 * `_target`の初期プロパティ。
 	 */
@@ -82,7 +82,7 @@ export class Tween {
 		}
 		this._steps = [];
 		this._lastStep = undefined;
-		this._pararel = false;
+		this._parallel = false;
 		this._initialProp = {};
 
 		this.paused = false;
@@ -132,7 +132,7 @@ export class Tween {
 	 * `Tween#con()`で並列実行を指定されたアクションが全て終了後、次の並列実行を指定されていないアクションを実行する。
 	 */
 	con(): this {
-		this._pararel = true;
+		this._parallel = true;
 		return this;
 	}
 
@@ -348,7 +348,7 @@ export class Tween {
 		this._stepIndex = this._steps.length;
 		this._loop = false;
 		this._lastStep = undefined;
-		this._pararel = false;
+		this._parallel = false;
 		this.paused = false;
 		if (this._modifiedHandler) {
 			this._modifiedHandler.call(this._target);
@@ -372,7 +372,7 @@ export class Tween {
 		this._stepIndex = this._steps.length;
 		this._loop = false;
 		this._lastStep = undefined;
-		this._pararel = false;
+		this._parallel = false;
 		this.paused = false;
 		this._stale = true;
 		if (this._modifiedHandler) {
@@ -545,13 +545,13 @@ export class Tween {
 	 * `this._pararel`が`true`の場合は最後に作成したステップにアクションを追加する。
 	 */
 	private _push(action: TweenAction): void {
-		if (this._pararel) {
+		if (this._parallel) {
 			this._lastStep.push(action);
 		} else {
 			const index = this._steps.push([action]) - 1;
 			this._lastStep = this._steps[index];
 		}
-		this._pararel = false;
+		this._parallel = false;
 	}
 
 	private _initAction(action: TweenAction): void {
