@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 3.2.2
+* `Timeline#completeAll()` の処理順序を時間軸にあうように修正
+
 ## 3.2.1
 * easing 関数の `Every` で `elapsed > duration` となる不具合を修正
 
