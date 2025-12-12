@@ -1,9 +1,11 @@
-// NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
-(<any>global).g = require("@akashic/akashic-engine");
+import * as g from "@akashic/akashic-engine";
 
-import { Easing } from "../../lib/Easing";
-import { Timeline } from "../../lib/Timeline";
-import { Tween } from "../../lib/Tween";
+// NOTE: スクリプトアセットとして実行される環境をエミュレーションするために globalThis.g を生成する
+(globalThis as any).g = g;
+
+import { Easing } from "../Easing";
+import { Timeline } from "../Timeline";
+import { Tween } from "../Tween";
 import { Game } from "./helpers/mock";
 
 describe("test Tween", () => {
@@ -240,7 +242,7 @@ describe("test Tween", () => {
 	it("cue", () => {
 		const target = {x: 100, y: 200};
 		const tw = new Tween(target);
-		let result: number;
+		let result = -1;
 		const cue: {[key: string]: () => void} = {
 			"0": () => {
 				result = 0;
@@ -264,7 +266,7 @@ describe("test Tween", () => {
 	it("cue - random order", () => {
 		const target = {x: 100, y: 200};
 		const tw = new Tween(target);
-		let result: number;
+		let result = -1;
 		const cue: {[key: string]: () => void} = {
 			"1000": () => {
 				result = 1000;
@@ -554,8 +556,8 @@ describe("test Tween", () => {
 			}
 		});
 
-		let elapsed: number;
-		let progress: number;
+		let elapsed = -1;
+		let progress = -1;
 		tw.every(
 			(e, p) => {
 				++calledCount;
@@ -746,16 +748,62 @@ describe("test Tween", () => {
 		twLoop.isFinished();
 		expect(count).toBe(4);
 	});
+
+	it("_getCurrentStepDuration", () => {
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target);
+
+		tw.to({x: 100}, 1000);
+		tw.to({y: 200}, 500);
+
+		// 最初のステップ (to)
+		expect(tw._getCurrentStepDuration()).toBe(1000);
+		tw._fire(1000);
+
+		// 2番目のステップ (to)
+		expect(tw._getCurrentStepDuration()).toBe(500);
+
+		// pause した状態で進めても duration は正しく取得できる
+		tw.paused = true;
+		tw._fire(500);
+		expect(tw._getCurrentStepDuration()).toBe(500);
+
+		tw.paused = false;
+		tw._fire(500);
+		// すべて完了
+		expect(tw._getCurrentStepDuration()).toBe(0);
+	});
+
+	it("_completeCurrentStep", () => {
+		const target = {x: 0, y: 0};
+		const tw = new Tween(target);
+
+		tw.to({x: 100, y: 100}, 1000);
+		tw.to({x: 200, y: 200}, 500);
+
+		// 最初のステップを途中まで進める
+		tw._fire(500);
+		expect(tw._target).toEqual({x: 50, y: 50});
+
+		// 最初のステップを完了させる
+		tw._completeCurrentStep();
+		expect(tw._target).toEqual({x: 100, y: 100});
+		expect(tw._stepIndex).toBe(1);
+
+		// 2つ目のステップを完了させる
+		tw._completeCurrentStep();
+		expect(tw._target).toEqual({x: 200, y: 200});
+		expect(tw._stepIndex).toBe(2);
+	});
 });
 
 describe("test Tween serializeState", () => {
-	let scene: g.Scene = null;
-	let game: g.Game = null;
+	let scene: g.Scene = null!;
+	let game: g.Game = null!;
 	beforeEach(() => {
-		game = new Game({width: 320, height: 270, fps: 30, main: "", assets: {}}, null);
+		game = new Game({width: 320, height: 270, fps: 30, main: "", assets: {}});
 		scene = new g.Scene({ game: game });
 	});
-
 
 	it("serializeState", () => {
 		const tl = new Timeline(scene);

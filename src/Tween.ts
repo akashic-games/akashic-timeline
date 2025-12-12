@@ -541,8 +541,95 @@ export class Tween {
 	}
 
 	/**
-	 * `this._pararel`が`false`の場合は新規にステップを作成し、アクションを追加する。
-	 * `this._pararel`が`true`の場合は最後に作成したステップにアクションを追加する。
+	 * 現在のステップのみを即座に完了させる。
+	 * 通常、ゲーム開発者がこのメソッドを呼び出す必要はない。
+	 * Timeline#completeAll() から使用され、1ステップずつ順番に完了させるために使用する。
+	 * @private
+	 */
+	_completeCurrentStep(): void {
+		if (this._steps.length === 0 || this.isFinished()|| this.paused) {
+			return;
+		}
+		if (this._stepIndex >= this._steps.length) {
+			if (this._loop) {
+				this._stepIndex = 0;
+			} else {
+				return;
+			}
+		}
+
+		const actions = this._steps[this._stepIndex];
+		for (let i = 0; i < actions.length; ++i) {
+			const action = actions[i];
+			if (!action.initialized) {
+				this._initAction(action);
+			}
+			if (action.finished) {
+				continue;
+			}
+
+			// アクションを最終状態にする
+			action.elapsed = action.duration;
+			const keys = Object.keys(action.goal);
+			for (let j = 0; j < keys.length; ++j) {
+				const key = keys[j];
+				// TweenTo/TweenBy/TweenByMult の場合は _initialProp を保存
+				if (!this._initialProp.hasOwnProperty(key)) {
+					this._initialProp[key] = this._target[key];
+				}
+				this._target[key] = action.goal[key];
+			}
+
+			if (action.type === ActionType.Call && typeof action.func === "function") {
+				action.func.call(this._target);
+			} else if (action.type === ActionType.Cue && action.cue) {
+				for (let k = 0; k < action.cue.length; ++k) {
+					action.cue[k].func.call(this._target);
+				}
+			} else if (action.type === ActionType.Every && typeof action.func === "function") {
+				action.func.call(this._target, action.duration, 1);
+			}
+
+			if (this._modifiedHandler) {
+				this._modifiedHandler.call(this._target);
+			}
+			action.finished = true;
+		}
+
+		// ステップの初期化フラグをリセットして次のステップに進む
+		for (let k = 0; k < actions.length; ++k) {
+			actions[k].initialized = false;
+		}
+		++this._stepIndex;
+	}
+
+	/**
+	 * 現在のステップの duration を返す。
+	 * 通常、ゲーム開発者がこのメソッドを呼び出す必要はない。
+	 * Timeline#completeAll() から使用される。
+	 * @private
+	 */
+	_getCurrentStepDuration(): number {
+		if (this._steps.length === 0 || this.isFinished()) {
+			return 0;
+		}
+		if (this._stepIndex >= this._steps.length) {
+			return 0;
+		}
+
+		const actions = this._steps[this._stepIndex];
+		let maxDuration = 0;
+		for (const action of actions) {
+			if (action.duration !== undefined && action.duration > maxDuration) {
+				maxDuration = action.duration;
+			}
+		}
+		return maxDuration;
+	}
+
+	/**
+	 * `this._parallel`が`false`の場合は新規にステップを作成し、アクションを追加する。
+	 * `this._parallel`が`true`の場合は最後に作成したステップにアクションを追加する。
 	 */
 	private _push(action: TweenAction): void {
 		if (this._parallel) {
