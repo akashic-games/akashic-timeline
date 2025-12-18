@@ -52,7 +52,7 @@ export class Tween {
 	/**
 	 * 次に追加するアクションが並列実行か否か。
 	 */
-	private _pararel: boolean;
+	private _parallel: boolean;
 	/**
 	 * `_target`の初期プロパティ。
 	 */
@@ -82,7 +82,7 @@ export class Tween {
 		}
 		this._steps = [];
 		this._lastStep = undefined;
-		this._pararel = false;
+		this._parallel = false;
 		this._initialProp = {};
 
 		this.paused = false;
@@ -132,7 +132,7 @@ export class Tween {
 	 * `Tween#con()`で並列実行を指定されたアクションが全て終了後、次の並列実行を指定されていないアクションを実行する。
 	 */
 	con(): this {
-		this._pararel = true;
+		this._parallel = true;
 		return this;
 	}
 
@@ -348,7 +348,7 @@ export class Tween {
 		this._stepIndex = this._steps.length;
 		this._loop = false;
 		this._lastStep = undefined;
-		this._pararel = false;
+		this._parallel = false;
 		this.paused = false;
 		if (this._modifiedHandler) {
 			this._modifiedHandler.call(this._target);
@@ -372,7 +372,7 @@ export class Tween {
 		this._stepIndex = this._steps.length;
 		this._loop = false;
 		this._lastStep = undefined;
-		this._pararel = false;
+		this._parallel = false;
 		this.paused = false;
 		this._stale = true;
 		if (this._modifiedHandler) {
@@ -541,17 +541,104 @@ export class Tween {
 	}
 
 	/**
-	 * `this._pararel`が`false`の場合は新規にステップを作成し、アクションを追加する。
-	 * `this._pararel`が`true`の場合は最後に作成したステップにアクションを追加する。
+	 * 現在のステップのみを即座に完了させる。
+	 * 通常、ゲーム開発者がこのメソッドを呼び出す必要はない。
+	 * Timeline#completeAll() から使用され、1ステップずつ順番に完了させるために使用する。
+	 * @private
+	 */
+	_completeCurrentStep(): void {
+		if (this._steps.length === 0 || this.isFinished()|| this.paused) {
+			return;
+		}
+		if (this._stepIndex >= this._steps.length) {
+			if (this._loop) {
+				this._stepIndex = 0;
+			} else {
+				return;
+			}
+		}
+
+		const actions = this._steps[this._stepIndex];
+		for (let i = 0; i < actions.length; ++i) {
+			const action = actions[i];
+			if (!action.initialized) {
+				this._initAction(action);
+			}
+			if (action.finished) {
+				continue;
+			}
+
+			// アクションを最終状態にする
+			action.elapsed = action.duration;
+			const keys = Object.keys(action.goal);
+			for (let j = 0; j < keys.length; ++j) {
+				const key = keys[j];
+				// TweenTo/TweenBy/TweenByMult の場合は _initialProp を保存
+				if (!this._initialProp.hasOwnProperty(key)) {
+					this._initialProp[key] = this._target[key];
+				}
+				this._target[key] = action.goal[key];
+			}
+
+			if (action.type === ActionType.Call && typeof action.func === "function") {
+				action.func.call(this._target);
+			} else if (action.type === ActionType.Cue && action.cue) {
+				for (let k = 0; k < action.cue.length; ++k) {
+					action.cue[k].func.call(this._target);
+				}
+			} else if (action.type === ActionType.Every && typeof action.func === "function") {
+				action.func.call(this._target, action.duration, 1);
+			}
+
+			if (this._modifiedHandler) {
+				this._modifiedHandler.call(this._target);
+			}
+			action.finished = true;
+		}
+
+		// ステップの初期化フラグをリセットして次のステップに進む
+		for (let k = 0; k < actions.length; ++k) {
+			actions[k].initialized = false;
+		}
+		++this._stepIndex;
+	}
+
+	/**
+	 * 現在のステップの duration を返す。
+	 * 通常、ゲーム開発者がこのメソッドを呼び出す必要はない。
+	 * Timeline#completeAll() から使用される。
+	 * @private
+	 */
+	_getCurrentStepDuration(): number {
+		if (this._steps.length === 0 || this.isFinished()) {
+			return 0;
+		}
+		if (this._stepIndex >= this._steps.length) {
+			return 0;
+		}
+
+		const actions = this._steps[this._stepIndex];
+		let maxDuration = 0;
+		for (const action of actions) {
+			if (action.duration !== undefined && action.duration > maxDuration) {
+				maxDuration = action.duration;
+			}
+		}
+		return maxDuration;
+	}
+
+	/**
+	 * `this._parallel`が`false`の場合は新規にステップを作成し、アクションを追加する。
+	 * `this._parallel`が`true`の場合は最後に作成したステップにアクションを追加する。
 	 */
 	private _push(action: TweenAction): void {
-		if (this._pararel) {
+		if (this._parallel) {
 			this._lastStep.push(action);
 		} else {
 			const index = this._steps.push([action]) - 1;
 			this._lastStep = this._steps[index];
 		}
-		this._pararel = false;
+		this._parallel = false;
 	}
 
 	private _initAction(action: TweenAction): void {

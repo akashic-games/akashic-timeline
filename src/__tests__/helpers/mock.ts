@@ -1,11 +1,13 @@
+import * as g from "@akashic/akashic-engine";
+
 /* eslint-disable @typescript-eslint/no-empty-function */
-// NOTE: スクリプトアセットとして実行される環境をエミュレーションするためにglobal.gを生成する
-(<any>global).g = require("@akashic/akashic-engine");
+// NOTE: スクリプトアセットとして実行される環境をエミュレーションするために globalThis.g を生成する
+(globalThis as any).g = g;
 
 export class Game extends g.Game {
 	constructor(
 		configuration: g.GameConfiguration,
-		resourceFactory: g.ResourceFactory,
+		resourceFactory: g.ResourceFactory = null!,
 		assetBase?: string,
 		selfId?: string,
 		operationPluginViewInfo?: g.OperationPluginViewInfo,
