@@ -89,25 +89,13 @@ export class Timeline {
 				this._tweensCreateQue = [];
 			}
 
-			// 全ての Tween が完了したか確認
-			let allFinished = true;
-			for (const tween of this._tweens) {
-				if (!tween.isFinished() && !tween.shouldRemove()) {
-					allFinished = false;
-					break;
-				}
-			}
-
-			if (allFinished) {
-				break;
-			}
-
 			// 次に完了する Tween を見つける (経過時間 + 現在のステップの duration が最小)
 			let nextTween: Tween | null = null;
+			let nextTweenDuration = Infinity;
 			let minCompletionTime = Infinity;
 
 			for (const tween of this._tweens) {
-				if (tween.isFinished() || tween.shouldRemove()) {
+				if (tween.shouldRemove()) {
 					continue;
 				}
 
@@ -118,6 +106,7 @@ export class Timeline {
 				if (completionTime < minCompletionTime) {
 					minCompletionTime = completionTime;
 					nextTween = tween;
+					nextTweenDuration = duration;
 				}
 			}
 
@@ -125,10 +114,9 @@ export class Timeline {
 				break;
 			}
 
-			const duration = nextTween._getCurrentStepDuration();
 			// ステップ内の call() で新しいTweenが作成されることを考慮し Tween を一ステップづつ完了させる
 			nextTween._completeCurrentStep();
-			tweenElapsed.set(nextTween, (tweenElapsed.get(nextTween) ?? 0) + duration);
+			tweenElapsed.set(nextTween, (tweenElapsed.get(nextTween) ?? 0) + nextTweenDuration);
 
 			// 完了した Tween を削除
 			this._tweens = this._tweens.filter(t => !t.shouldRemove());
