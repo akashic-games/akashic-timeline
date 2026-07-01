@@ -38,5 +38,12 @@
   },
   "publishConfig": {
     "@akashic-extension:registry": "https://registry.npmjs.org/"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.11.0",
+      "onFail": "error"
+    }
   }
 }
